@@ -1,6 +1,13 @@
 package ru.vest_news.vest_news.model;
 
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class NewsItem {
+    private static final String TAG = "NewsItem";
     private String mTitle;
     private String mId;
     private String mType;
@@ -77,5 +84,15 @@ public class NewsItem {
     @Override
     public String toString() {
         return mTitle;
+    }
+
+    public String getDate() {
+        long dateLong = Long.parseLong(mCreated+"000");
+        Log.i(TAG, "Распарсили лонг из " + getCreated() + " в " + dateLong);
+        Date date = new Date();
+        date.setTime(dateLong);
+        Log.i(TAG, "Инициализирована дата:" + date.toString());
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.ROOT);
+        return format.format(date);
     }
 }

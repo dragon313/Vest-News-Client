@@ -3,14 +3,15 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginLeft="8dp"
-              android:layout_marginRight="8dp"
+              android:layout_marginLeft="16dp"
+              android:layout_marginRight="16dp"
               android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:elevation="8dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:elevation="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -18,22 +19,46 @@
 
             <TextView
                 android:id="@+id/news_list_item_title"
-                android:layout_margin="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:layout_margin="8dp"
+                android:ellipsize="end"
                 android:maxLines="2"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Заголовок новости"/>
 
             <ImageView
+                android:id="@+id/news_list_view_counter_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/news_list_item_title"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_view"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                tools:text="1024"
+                android:id="@+id/news_list_view_counter_text_view"
+                android:layout_toLeftOf="@+id/news_list_view_counter_image_view"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
                 android:id="@+id/news_list_item_photo"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_height="85dp"
                 android:layout_below="@id/news_list_item_title"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
-                android:background="@color/cardview_shadow_start_color"/>
+                android:background="@color/cardview_shadow_start_color"
+                android:elevation="4dp"
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:id="@+id/news_list_item_body_text_view"
@@ -44,7 +69,7 @@
                 android:layout_marginRight="4dp"
                 android:layout_toRightOf="@id/news_list_item_photo"
                 android:ellipsize="end"
-                android:maxLines="4"
+                android:maxLines="5"
                 tools:text="@string/lorem"/>
 
             <TextView
@@ -61,7 +86,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/news_list_item_separator"
-                android:layout_margin="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
                 tools:text="Дата"/>
 
             <TextView
@@ -70,7 +96,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/news_list_item_separator"
-                android:layout_margin="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginRight="8dp"
                 tools:text="Рубрика"/>
 
         </RelativeLayout>

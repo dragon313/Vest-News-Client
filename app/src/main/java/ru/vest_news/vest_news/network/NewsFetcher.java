@@ -54,7 +54,7 @@ public class NewsFetcher {
         try {
             String url = Uri.parse("http://www.vest-news.ru/api/news/")
                     .buildUpon()
-                    .appendPath("91627")
+                    .appendPath("91633")
                     .build().toString();
             String jsonString = getUrlString(url);
             Log.i(TAG, "Received JSON: " + jsonString);

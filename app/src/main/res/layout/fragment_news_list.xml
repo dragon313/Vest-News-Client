@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_news_list_recycler_view"
     android:layout_width="match_parent"
-    android:background="#ECEFF1"
     android:layout_height="match_parent">
-</android.support.v7.widget.RecyclerView>
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_news_list_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ECEFF1">
+    </android.support.v7.widget.RecyclerView>
+</android.support.v4.widget.DrawerLayout>

@@ -102,6 +102,7 @@ public class NewsListFragment extends Fragment {
         private TextView mBodyTextView;
         private TextView mDateTextView;
         private TextView mRubricTextView;
+        private TextView mViewCounterTextView;
 
         public NewsHolder(View itemView) {
             super(itemView);
@@ -110,13 +111,15 @@ public class NewsListFragment extends Fragment {
             mBodyTextView = (TextView) itemView.findViewById(R.id.news_list_item_body_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.news_list_item_date_text_view);
             mRubricTextView = (TextView) itemView.findViewById(R.id.news_list_rubric_text_view);
+            mViewCounterTextView = (TextView) itemView.findViewById(R.id.news_list_view_counter_text_view);
         }
 
         public void bindNewsItem(NewsItem item) {
             mTitleTextView.setText(item.getTitle());
             mBodyTextView.setText(Html.fromHtml(item.getBody()));
-            mDateTextView.setText(item.getCreated());
+            mDateTextView.setText(item.getDate());
             mRubricTextView.setText(item.getRubric());
+            mViewCounterTextView.setText(item.getViews());
             Picasso.with(getActivity())
                     .load(Uri.parse(item.getPhotoFilePath()))
                     .into(mPhotoImageView);
