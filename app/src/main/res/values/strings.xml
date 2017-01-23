@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Vest-News</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tempus, neque id posuere ultricies, purus eros lobortis ligula, sed fermentum libero orci in ipsum. Aenean finibus molestie velit. Cras velit lacus, porta non turpis vel, fringilla eleifend leo. Aenean commodo turpis non libero mattis, vel accumsan erat pulvinar. Curabitur tincidunt, quam eu varius ullamcorper, sem lectus sodales ante, vitae facilisis felis mauris id lorem. Praesent ex nisl, aliquet at tortor eget, placerat scelerisque felis. Vestibulum eget varius turpis. Proin luctus ligula sit amet arcu tincidunt, at euismod tellus tristique. Vestibulum efficitur, erat eu pharetra vestibulum, arcu dolor vestibulum enim, vitae.</string>
 </resources>

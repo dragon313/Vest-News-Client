@@ -76,13 +76,15 @@ public class NewsFetcher {
         Log.d(TAG, item.getTitle());
         item.setId(newsItemJsonObject.getString("nid"));
         Log.d(TAG, item.getId());
+        item.setCreated(newsItemJsonObject.getString("created"));
+        Log.d(TAG, item.getCreated());
         item.setType(newsItemJsonObject.getString("type"));
         Log.d(TAG, item.getType());
         item.setBody(newsItemJsonObject.getString("body"));
         Log.d(TAG, item.getBody());
         item.setRubric(newsItemJsonObject.getString("rubric"));
         Log.d(TAG, item.getRubric());
-        item.setPhotoFilePath(newsItemJsonObject.getString("filepath"));
+        item.setPhotoFilePath("http://www.vest-news.ru/"+newsItemJsonObject.getString("filepath"));
         Log.d(TAG, item.getPhotoFilePath());
         item.setViews(newsItemJsonObject.getString("views"));
         Log.d(TAG, item.getViews());

@@ -1,16 +1,22 @@
 package ru.vest_news.vest_news.ui;
 
 
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +80,8 @@ public class NewsListFragment extends Fragment {
 
         @Override
         public NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            TextView textView = new TextView(getActivity());
-            return new NewsHolder(textView);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.news_list_item, parent, false);
+            return new NewsHolder(view);
         }
 
         @Override
@@ -92,14 +98,28 @@ public class NewsListFragment extends Fragment {
 
     private class NewsHolder extends RecyclerView.ViewHolder {
         private TextView mTitleTextView;
+        private ImageView mPhotoImageView;
+        private TextView mBodyTextView;
+        private TextView mDateTextView;
+        private TextView mRubricTextView;
 
         public NewsHolder(View itemView) {
             super(itemView);
-            mTitleTextView = (TextView) itemView;
+            mTitleTextView = (TextView) itemView.findViewById(R.id.news_list_item_title);
+            mPhotoImageView = (ImageView) itemView.findViewById(R.id.news_list_item_photo);
+            mBodyTextView = (TextView) itemView.findViewById(R.id.news_list_item_body_text_view);
+            mDateTextView = (TextView) itemView.findViewById(R.id.news_list_item_date_text_view);
+            mRubricTextView = (TextView) itemView.findViewById(R.id.news_list_rubric_text_view);
         }
 
         public void bindNewsItem(NewsItem item) {
             mTitleTextView.setText(item.getTitle());
+            mBodyTextView.setText(Html.fromHtml(item.getBody()));
+            mDateTextView.setText(item.getCreated());
+            mRubricTextView.setText(item.getRubric());
+            Picasso.with(getActivity())
+                    .load(Uri.parse(item.getPhotoFilePath()))
+                    .into(mPhotoImageView);
         }
     }
 
