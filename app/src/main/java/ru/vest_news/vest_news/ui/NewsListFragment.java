@@ -43,6 +43,17 @@ public class NewsListFragment extends Fragment {
 
         mNewsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_news_list_recycler_view);
         mNewsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mNewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
         setupAdapter();
 
         return v;
