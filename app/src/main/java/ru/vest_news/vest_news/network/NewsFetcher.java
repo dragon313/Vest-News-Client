@@ -54,7 +54,7 @@ public class NewsFetcher {
         try {
             String url = Uri.parse("http://www.vest-news.ru/api/news/")
                     .buildUpon()
-                    .appendPath("91633")
+                    .appendPath(getLastNewsUri())
                     .build().toString();
             String jsonString = getUrlString(url);
             Log.i(TAG, "Received JSON: " + jsonString);
@@ -66,6 +66,14 @@ public class NewsFetcher {
             Log.e(TAG, "Filed to parse JSON", e);
         }
         return items;
+    }
+
+    //Для начала напишем метод, который возвращает урл последней новости.
+    public String getLastNewsUri() throws IOException {
+        String lastNewsId = getUrlString("http://www.vest-news.ru/api/last-news-item-id");
+        lastNewsId = lastNewsId.replace('\"', ' ').trim();
+        Log.i(TAG, "ID последней новости: " + lastNewsId);
+        return lastNewsId;
     }
 
     private void parseItems(List<NewsItem> items, JSONObject jsonBody) throws IOException, JSONException {
