@@ -17,7 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NewDetailActivity">
+        <activity android:name=".ui.NewsDetailActivity">
         </activity>
     </application>
 
