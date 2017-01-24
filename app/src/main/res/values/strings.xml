@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Vest-News</string>
+    <string name="lorem">На презентации Google I/O 15, компания Google представила новую версию библиотеки поддержки которая реализует несколько компонентов, сильно связанных со спецификациями Material Design, среди этих компонентов вы можете найти новые типы ViewGroup такие как AppbarLayout, CollapsingToolbarLayout и CoordinatorLayout.</string>
+    <string name="product">Product</string>
+    <string name="cart">Cart</string>
+    <string name="address">Address</string>
+    <string name="settings">Settings</string>
 </resources>
