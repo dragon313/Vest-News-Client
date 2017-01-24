@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.Gallery;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ import ru.vest_news.vest_news.model.NewsItem;
 
 public class NewsFetcher {
     private static final String TAG = "NewsFetcher";
+    private static String NEWS_TO_LOAD = "50";
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -52,25 +54,14 @@ public class NewsFetcher {
     public List<NewsItem> fetchItems() {
         List<NewsItem> items = new ArrayList<>();
         try {
-            //Собираюсь в цикле гонять запросы и проверять, чтоб возвращались JSON.
-            //Если JSON валидный, то инкрементим каунтер и передаем всё дальше, если нет, повторяем запрос.
-            //Падает с ошибкой, но с такими настройками пока работает.
-            //Поглядим, что дальше будет.
-            int counter = 50; //Хардкожу потихоньку
-            int lastId = Integer.parseInt(getLastNewsUri());
-            Log.i(TAG, "Индекс последней новости в виде числа: " + lastId);
-            while (counter != 0) {
-                String url = Uri.parse("http://www.vest-news.ru/api/news/")
-                        .buildUpon()
-                        .appendPath(String.valueOf(lastId))
-                        .build().toString();
-                String jsonString = getUrlString(url);
-                Log.i(TAG, "Received JSON: " + jsonString);
-                JSONObject jsonBody = new JSONObject(jsonString);
-                parseItems(items, jsonBody);
-                lastId--;
-                counter--;
-            }
+            String url = Uri.parse("http://www.vest-news.ru/api/news")
+                    .buildUpon()
+                    .appendQueryParameter("limit", NEWS_TO_LOAD)
+                    .build().toString();
+            String jsonString = getUrlString(url);
+            Log.d(TAG, "Received JSON: " + jsonString);
+            JSONObject jsonBody = new JSONObject(jsonString);
+            parseItems(items, jsonBody);
         } catch (IOException e) {
             Log.e(TAG, "Failed to fetch items", e);
         } catch (JSONException e) {
@@ -79,35 +70,30 @@ public class NewsFetcher {
         return items;
     }
 
-    //Для начала напишем метод, который возвращает урл последней новости.
-    public String getLastNewsUri() throws IOException {
-        String lastNewsId = getUrlString("http://www.vest-news.ru/api/last-news-item-id");
-        lastNewsId = lastNewsId.replace('\"', ' ').trim();
-        Log.i(TAG, "ID последней новости: " + lastNewsId);
-        return lastNewsId;
-    }
-
     private void parseItems(List<NewsItem> items, JSONObject jsonBody) throws IOException, JSONException {
-        JSONObject newsItemJsonObject = jsonBody.getJSONObject("article");
 
-        NewsItem item = new NewsItem();
-        item.setTitle(newsItemJsonObject.getString("title"));
-//        Log.d(TAG, item.getTitle());
-        item.setId(newsItemJsonObject.getString("nid"));
-//        Log.d(TAG, item.getId());
-        item.setCreated(newsItemJsonObject.getString("created"));
-//        Log.d(TAG, item.getCreated());
-        item.setType(newsItemJsonObject.getString("type"));
-//        Log.d(TAG, item.getType());
-        item.setBody(newsItemJsonObject.getString("body"));
-//        Log.d(TAG, item.getBody());
-        item.setRubric(newsItemJsonObject.getString("rubric"));
-//        Log.d(TAG, item.getRubric());
-        item.setPhotoFilePath("http://www.vest-news.ru/" + newsItemJsonObject.getString("filepath"));
-//        Log.d(TAG, item.getPhotoFilePath());
-        item.setViews(newsItemJsonObject.getString("views"));
-//        Log.d(TAG, item.getViews());
+        JSONArray rows = jsonBody.getJSONArray("rows");
+        Log.d(TAG, "Доступно новостей: " + rows.length());
+        for (int i = 0; i < rows.length(); i++) {
+            NewsItem item = new NewsItem();
+            JSONObject row = rows.getJSONObject(i);
+            item.setTitle(row.getString("title"));
+//            Log.d(TAG, item.getTitle());
+            item.setId(row.getString("nid"));
+//            Log.d(TAG, item.getId());
+            item.setCreated(row.getString("created"));
+//            Log.d(TAG, item.getCreated());
+            item.setBody(row.getString("body"));
+//            Log.d(TAG, item.getBody());
+//            item.setRubric(row.getString("rubric"));
+//            Log.d(TAG, item.getRubric());
+            item.setPhotoFilePath("http://www.vest-news.ru/" + row.getString("filepath"));
+//            Log.d(TAG, item.getPhotoFilePath());
+            item.setViews(row.getString("views"));
+//            Log.d(TAG, item.getViews());
+            items.add(item);
+        }
 
-        items.add(item);
+
     }
 }
