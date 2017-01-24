@@ -18,7 +18,7 @@ public class NewsItem {
     private String mViews;
 
     public String getTitle() {
-        return mTitle;
+        return mTitle.trim();
     }
 
     public void setTitle(String title) {
@@ -88,7 +88,7 @@ public class NewsItem {
 
     public String getDate() {
         Date date = new Date(Long.parseLong(mCreated+"000"));
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.ENGLISH);
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.ROOT);
         return format.format(date);
     }
 }
