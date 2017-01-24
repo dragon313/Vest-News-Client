@@ -67,7 +67,6 @@ public class NewsFetcher {
         } catch (JSONException e) {
             Log.e(TAG, "Filed to parse JSON", e);
         }
-
         return items;
     }
 

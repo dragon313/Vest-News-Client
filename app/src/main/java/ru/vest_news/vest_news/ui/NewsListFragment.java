@@ -1,6 +1,7 @@
 package ru.vest_news.vest_news.ui;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,14 @@ import ru.vest_news.vest_news.network.NewsFetcher;
 
 public class NewsListFragment extends Fragment {
     private static final String TAG = "NewsListFragment";
+
+    public static final String EXTRA_TITLE = "EXTRA_TITLE";
+    public static final String EXTRA_BODY = "EXTRA_BODY";
+    public static final String EXTRA_CREATED = "EXTRA_CREATED";
+    public static final String EXTRA_RUBRIC = "EXTRA_RUBRIC";
+    public static final String EXTRA_VIEWS = "EXTRA_VIEWS";
+    public static final String EXTRA_PHOTO_FILE_PATH = "EXTRA_PHOTO_FILE_PATH";
+
     RecyclerView mNewsRecyclerView;
     private List<NewsItem> mItems = new ArrayList<>();
 
@@ -85,7 +94,14 @@ public class NewsListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(NewsHolder holder, int position) {
-            NewsItem item = mNewsItems.get(position);
+            final NewsItem item = mNewsItems.get(position);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent detailIntent = createDetailIntent(item);
+                    startActivity(detailIntent);
+                }
+            });
             holder.bindNewsItem(item);
         }
 
@@ -93,6 +109,17 @@ public class NewsListFragment extends Fragment {
         public int getItemCount() {
             return mNewsItems.size();
         }
+    }
+
+    private Intent createDetailIntent(NewsItem item) {
+        Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
+        intent.putExtra(EXTRA_TITLE, item.getTitle());
+        intent.putExtra(EXTRA_BODY, item.getBody());
+        intent.putExtra(EXTRA_CREATED, item.getCreated());
+        intent.putExtra(EXTRA_RUBRIC, item.getRubric());
+        intent.putExtra(EXTRA_VIEWS, item.getViews());
+        intent.putExtra(EXTRA_PHOTO_FILE_PATH, item.getPhotoFilePath());
+        return intent;
     }
 
     private class NewsHolder extends RecyclerView.ViewHolder {
@@ -111,6 +138,7 @@ public class NewsListFragment extends Fragment {
             mDateTextView = (TextView) itemView.findViewById(R.id.news_list_item_date_text_view);
             mRubricTextView = (TextView) itemView.findViewById(R.id.news_list_rubric_text_view);
             mViewCounterTextView = (TextView) itemView.findViewById(R.id.news_list_view_counter_text_view);
+
         }
 
         public void bindNewsItem(NewsItem item) {
