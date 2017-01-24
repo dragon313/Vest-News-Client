@@ -87,12 +87,8 @@ public class NewsItem {
     }
 
     public String getDate() {
-        long dateLong = Long.parseLong(mCreated+"000");
-        Log.i(TAG, "Распарсили лонг из " + getCreated() + " в " + dateLong);
-        Date date = new Date();
-        date.setTime(dateLong);
-        Log.i(TAG, "Инициализирована дата:" + date.toString());
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.ROOT);
+        Date date = new Date(Long.parseLong(mCreated+"000"));
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.ENGLISH);
         return format.format(date);
     }
 }
