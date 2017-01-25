@@ -10,11 +10,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -34,11 +36,8 @@ public class NewsDetailFragment extends Fragment {
     public static final String EXTRA_PHOTO_FILE_PATH = "EXTRA_PHOTO_FILE_PATH";
 
     private Toolbar mToolbar;
-    private AppBarLayout mAppBarLayout;
-    private CollapsingToolbarLayout mCollapsingToolbar;
     private TextView mToolbarTitle;
     private Intent mIntent;
-    private TextView mTitleTextView;
     private TextView mBodyTextView;
     private ImageView mPhotoImageView;
 
@@ -62,9 +61,9 @@ public class NewsDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_detail, container, false);
         mToolbar = (Toolbar) v.findViewById(R.id.fragment_news_detail_toolbar);
-        mAppBarLayout = (AppBarLayout) v.findViewById(R.id.fragment_news_detail_appbar);
-        mCollapsingToolbar = (CollapsingToolbarLayout) v.findViewById(R.id.fragment_news_detail_collapsing_toolbar);
+        mToolbarTitle = (TextView) v.findViewById(R.id.fragment_news_detail_title_text_view);
         mPhotoImageView = (ImageView) v.findViewById(R.id.fragment_news_detail_photo_image_view);
+        mBodyTextView = (TextView) v.findViewById(R.id.fragment_news_detail_body_text_view);
         updateUI();
         return v;
     }
@@ -74,7 +73,8 @@ public class NewsDetailFragment extends Fragment {
                 .load(mIntent.getStringExtra(EXTRA_PHOTO_FILE_PATH))
                 .error(R.drawable.logo)
                 .into(mPhotoImageView);
-
+        mToolbarTitle.setText(mIntent.getStringExtra(EXTRA_TITLE));
+        mBodyTextView.setText(Html.fromHtml(mIntent.getStringExtra(EXTRA_BODY)));
     }
 
     @Override
@@ -86,15 +86,12 @@ public class NewsDetailFragment extends Fragment {
     private void setToolBar() {
         NewsDetailActivity activity = (NewsDetailActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
-        mAppBarParams = (AppBarLayout.LayoutParams) mCollapsingToolbar.getLayoutParams();
         ActionBar actionBar = activity.getSupportActionBar();
         if (actionBar != null) {
             activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-//        mToolbar.setTitle(mIntent.getStringExtra(EXTRA_TITLE));
-        mCollapsingToolbar.setTitle(mIntent.getStringExtra(EXTRA_TITLE));
-//        mToolbar.setTitle(null);
+        mToolbar.setTitle(null);
     }
 
     public static Intent getIntent(Context context, NewsItem item) {
