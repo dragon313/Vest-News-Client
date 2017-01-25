@@ -10,14 +10,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.vest_news.vest_news.R;
 
 public class NewsDetailFragment extends Fragment {
     private Toolbar mToolbar;
-    protected TextView mToolbarTitle;
+    private TextView mToolbarTitle;
     private Intent mIntent;
+    private TextView mTitleTextView;
+    private TextView mBodyTextView;
+    private ImageView mPhotoImageView;
+
 
     public static NewsDetailFragment newInstance() {
         return new NewsDetailFragment();
