@@ -2,13 +2,16 @@ package ru.vest_news.vest_news.ui;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +39,7 @@ public class NewsListFragment extends Fragment {
     public static final String EXTRA_PHOTO_FILE_PATH = "EXTRA_PHOTO_FILE_PATH";
 
     RecyclerView mNewsRecyclerView;
+    Toolbar mToolbar;
     private List<NewsItem> mItems = new ArrayList<>();
 
 
@@ -47,6 +51,7 @@ public class NewsListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
         new NewsParser().execute();
     }
 
@@ -54,13 +59,14 @@ public class NewsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_list, container, false);
-
+        mToolbar = (Toolbar) v.findViewById(R.id.fragment_news_list_toolbar);
         mNewsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_news_list_recycler_view);
         mNewsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mNewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                // TODO: 025 25.01.17 Написать подзагрузку новостей, если список прокручен до упора.
             }
 
             @Override
@@ -69,8 +75,22 @@ public class NewsListFragment extends Fragment {
             }
         });
         setupAdapter();
-
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setToolBar();
+    }
+
+    private void setToolBar() {
+        NewsListActivity activity = (NewsListActivity) getActivity();
+//        activity.getSupportActionBar().setTitle("Весть-NEWS");
+//        activity.getDelegate().setSupportActionBar(mToolbar);
+        activity.setSupportActionBar(mToolbar);
+        mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar.setTitle("Весть-NEWS");
     }
 
     private void setupAdapter() {
