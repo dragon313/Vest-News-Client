@@ -15,14 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/background_light"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="false">
 
         <!--Надо попробовать тут тему поменять на Light-->
         <android.support.design.widget.AppBarLayout
             android:id="@+id/fragment_news_detail_appbar"
             android:layout_width="match_parent"
             android:layout_height="320dp"
-            android:fitsSystemWindows="true"
+            android:fitsSystemWindows="false"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:elevation="8dp">
 
@@ -30,15 +30,10 @@
                 android:id="@+id/fragment_news_detail_collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
+                app:titleEnabled="false"
+                android:fitsSystemWindows="false"
                 app:contentScrim="@android:color/transparent"
-                app:expandedTitleMarginBottom="8dp"
-                app:expandedTitleMarginEnd="48dp"
-                app:expandedTitleMarginStart="8dp"
-                app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:maxLines="4">
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <ImageView
                     android:id="@+id/fragment_news_detail_photo_image_view"
@@ -51,8 +46,9 @@
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/fragment_news_detail_toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="wrap_content"
                     app:layout_collapseMode="pin"
+                    android:fitsSystemWindows="false"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
                 </android.support.v7.widget.Toolbar>
 
@@ -61,14 +57,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
+                    android:maxLines="3"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
                     android:background="@color/colorGrayTransparent"
-                    android:fitsSystemWindows="true"
-                    android:ellipsize="middle"
                     android:minHeight="?attr/actionBarSize"
                     android:padding="8dp"
-                    app:layout_scrollFlags="enterAlways"
                     android:textColor="@color/colorWhite"
-                    app:layout_collapseMode="pin"/>
+                    />
 
             </net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>

@@ -92,6 +92,8 @@ public class NewsDetailFragment extends Fragment {
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mToolbar.setTitle(null);
+
+        mToolbar.setMinimumHeight(mToolbarTitle.getLineHeight());
     }
 
     public static Intent getIntent(Context context, NewsItem item) {
