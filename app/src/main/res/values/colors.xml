@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#c3d50000</color>
     <color name="colorAccent">#FF4081</color>
     <color name="list_item_separator_color">#c3d50000</color>
+    <color name="colorWhite">#ECEFF1</color>
 </resources>
