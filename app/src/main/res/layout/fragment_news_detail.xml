@@ -9,15 +9,32 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/fragment_news_detail_toolbar"
+        style="@style/Widget.MyApp.Toolbar.Solid"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:title="@string/app_name"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:elevation="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:fontFamily="casual"
+            android:id="@+id/fragment_news_detail_toolbar_title"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/news_title"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+    </android.support.v7.widget.Toolbar>
+
     <TextView
         android:layout_width="wrap_content"
-        tools:text="Проверка"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        tools:text="Проверка"/>
 </LinearLayout>

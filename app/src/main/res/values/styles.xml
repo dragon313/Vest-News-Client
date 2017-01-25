@@ -1,9 +1,15 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--Стиль для проверки работоспособности кастомного тулбара-->
     <style name="myTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.MyApp.Toolbar.Solid" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:elevation" tools:ignore="NewApi">4dp</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
     </style>
 
 </resources>
