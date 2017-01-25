@@ -86,11 +86,8 @@ public class NewsListFragment extends Fragment {
 
     private void setToolBar() {
         NewsListActivity activity = (NewsListActivity) getActivity();
-//        activity.getSupportActionBar().setTitle("Весть-NEWS");
-//        activity.getDelegate().setSupportActionBar(mToolbar);
         activity.setSupportActionBar(mToolbar);
-        mToolbar.setTitleTextColor(Color.WHITE);
-        mToolbar.setTitle("Весть-NEWS");
+        mToolbar.setTitle("");
     }
 
     private void setupAdapter() {
@@ -169,6 +166,8 @@ public class NewsListFragment extends Fragment {
             mViewCounterTextView.setText(item.getViews());
             Picasso.with(getActivity())
                     .load(Uri.parse(item.getPhotoFilePath()))
+                    .placeholder(R.drawable.logo)
+                    .error(R.drawable.logo)
                     .into(mPhotoImageView);
         }
     }

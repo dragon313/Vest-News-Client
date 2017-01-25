@@ -85,7 +85,7 @@ public class NewsFetcher {
 //            Log.d(TAG, item.getCreated());
             item.setBody(row.getString("body"));
 //            Log.d(TAG, item.getBody());
-//            item.setRubric(row.getString("rubric"));
+            item.setRubric(row.getString("rubric"));
 //            Log.d(TAG, item.getRubric());
             item.setPhotoFilePath("http://www.vest-news.ru/" + row.getString("filepath"));
 //            Log.d(TAG, item.getPhotoFilePath());

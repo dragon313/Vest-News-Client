@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Vest-News</string>
+    <string name="app_name">Весть-NEWS</string>
+    <string name="news_title">Новости</string>
 </resources>
