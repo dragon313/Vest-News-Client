@@ -18,14 +18,14 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <TextView
+            android:id="@+id/fragment_news_detail_toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:elevation="2dp"
             android:ellipsize="end"
-            android:maxLines="1"
             android:fontFamily="casual"
-            android:id="@+id/fragment_news_detail_toolbar_title"
             android:gravity="center"
+            android:maxLines="1"
             android:padding="8dp"
             android:text="@string/news_title"
             android:textColor="@color/colorWhite"

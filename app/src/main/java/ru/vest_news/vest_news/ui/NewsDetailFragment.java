@@ -14,10 +14,11 @@ import android.widget.TextView;
 
 import ru.vest_news.vest_news.R;
 
-public class NewsDetailFragment extends Fragment{
+public class NewsDetailFragment extends Fragment {
     private Toolbar mToolbar;
     protected TextView mToolbarTitle;
     private Intent mIntent;
+
     public static NewsDetailFragment newInstance() {
         return new NewsDetailFragment();
     }
