@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class NewsService extends IntentService {
     private static final String TAG = "NewsService";
-    public NewsService(String name) {
+    public NewsService() {
         super(TAG);
     }
 

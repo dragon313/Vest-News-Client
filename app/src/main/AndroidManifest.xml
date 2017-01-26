@@ -19,6 +19,8 @@
         </activity>
         <activity android:name=".ui.NewsDetailActivity" android:parentActivityName=".ui.NewsListActivity">
         </activity>
+
+        <service android:name=".network.NewsService"/>
     </application>
 
 </manifest>

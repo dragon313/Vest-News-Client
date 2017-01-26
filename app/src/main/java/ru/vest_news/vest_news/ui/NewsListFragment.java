@@ -27,6 +27,7 @@ import java.util.List;
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
 import ru.vest_news.vest_news.network.NewsFetcher;
+import ru.vest_news.vest_news.network.NewsService;
 
 public class NewsListFragment extends Fragment {
     private static final String TAG = "NewsListFragment";
@@ -46,6 +47,8 @@ public class NewsListFragment extends Fragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
         new NewsParser().execute();
+        Intent i = NewsService.newIntent(getActivity());
+        getActivity().startService(i);
     }
 
     @Nullable
