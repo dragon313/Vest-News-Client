@@ -31,13 +31,6 @@ import ru.vest_news.vest_news.network.NewsFetcher;
 public class NewsListFragment extends Fragment {
     private static final String TAG = "NewsListFragment";
 
-    public static final String EXTRA_TITLE = "EXTRA_TITLE";
-    public static final String EXTRA_BODY = "EXTRA_BODY";
-    public static final String EXTRA_CREATED = "EXTRA_CREATED";
-    public static final String EXTRA_RUBRIC = "EXTRA_RUBRIC";
-    public static final String EXTRA_VIEWS = "EXTRA_VIEWS";
-    public static final String EXTRA_PHOTO_FILE_PATH = "EXTRA_PHOTO_FILE_PATH";
-
     RecyclerView mNewsRecyclerView;
     Toolbar mToolbar;
     private List<NewsItem> mItems = new ArrayList<>();
@@ -115,7 +108,7 @@ public class NewsListFragment extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent detailIntent = createDetailIntent(item);
+                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item);
                     startActivity(detailIntent);
                 }
             });
@@ -126,17 +119,6 @@ public class NewsListFragment extends Fragment {
         public int getItemCount() {
             return mNewsItems.size();
         }
-    }
-
-    private Intent createDetailIntent(NewsItem item) {
-        Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
-        intent.putExtra(EXTRA_TITLE, item.getTitle());
-        intent.putExtra(EXTRA_BODY, item.getBody());
-        intent.putExtra(EXTRA_CREATED, item.getCreated());
-        intent.putExtra(EXTRA_RUBRIC, item.getRubric());
-        intent.putExtra(EXTRA_VIEWS, item.getViews());
-        intent.putExtra(EXTRA_PHOTO_FILE_PATH, item.getPhotoFilePath());
-        return intent;
     }
 
     private class NewsHolder extends RecyclerView.ViewHolder {
