@@ -78,19 +78,12 @@ public class NewsFetcher {
             NewsItem item = new NewsItem();
             JSONObject row = rows.getJSONObject(i);
             item.setTitle(row.getString("title"));
-//            Log.d(TAG, item.getTitle());
             item.setId(row.getString("nid"));
-//            Log.d(TAG, item.getId());
             item.setCreated(row.getString("created"));
-//            Log.d(TAG, item.getCreated());
             item.setBody(row.getString("body"));
-//            Log.d(TAG, item.getBody());
             item.setRubric(row.getString("rubric"));
-//            Log.d(TAG, item.getRubric());
             item.setPhotoFilePath("http://www.vest-news.ru/" + row.getString("filepath"));
-//            Log.d(TAG, item.getPhotoFilePath());
             item.setViews(row.getString("views"));
-//            Log.d(TAG, item.getViews());
             items.add(item);
         }
 
