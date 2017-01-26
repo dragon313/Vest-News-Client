@@ -44,6 +44,8 @@ public class NewsDetailFragment extends Fragment {
     private Intent mIntent;
     private WebView mBodyTextView;
     private ImageView mPhotoImageView;
+    private TextView mRubricTextView;
+    private TextView mViewCounterTextView;
 
 
 
@@ -67,8 +69,22 @@ public class NewsDetailFragment extends Fragment {
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) v.findViewById(R.id.fragment_news_detail_collapsing_toolbar);
         mToolbarTitle = (TextView) v.findViewById(R.id.fragment_news_detail_title_text_view);
         mPhotoImageView = (ImageView) v.findViewById(R.id.fragment_news_detail_photo_image_view);
+        mRubricTextView = (TextView) v.findViewById(R.id.fragment_news_detail_rubric_text_view);
+        mViewCounterTextView = (TextView) v.findViewById(R.id.fragment_news_detail_view_counter_text_view);
         mBodyTextView = (WebView) v.findViewById(R.id.fragment_news_detail_body_text_view);
         updateUI();
+        return v;
+    }
+
+    private void updateUI() {
+        Picasso.with(getActivity())
+                .load(mIntent.getStringExtra(EXTRA_PHOTO_FILE_PATH))
+                .error(R.drawable.logo)
+                .into(mPhotoImageView);
+        mToolbarTitle.setText(mIntent.getStringExtra(EXTRA_TITLE));
+        mRubricTextView.setText(mIntent.getStringExtra(EXTRA_RUBRIC));
+        mViewCounterTextView.setText(mIntent.getStringExtra(EXTRA_VIEWS));
+        mBodyTextView.loadData(mIntent.getStringExtra(EXTRA_BODY).trim(), "text/html; charset=utf-8", "UTF-8");
         mCollapsingToolbarLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -81,16 +97,6 @@ public class NewsDetailFragment extends Fragment {
                 }
             }
         });
-        return v;
-    }
-
-    private void updateUI() {
-        Picasso.with(getActivity())
-                .load(mIntent.getStringExtra(EXTRA_PHOTO_FILE_PATH))
-                .error(R.drawable.logo)
-                .into(mPhotoImageView);
-        mToolbarTitle.setText(mIntent.getStringExtra(EXTRA_TITLE));
-        mBodyTextView.loadData(mIntent.getStringExtra(EXTRA_BODY), "text/html; charset=utf-8", "UTF-8");
     }
 
     @Override

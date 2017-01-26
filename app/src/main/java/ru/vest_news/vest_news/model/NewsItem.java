@@ -50,7 +50,7 @@ public class NewsItem {
     }
 
     public String getBody() {
-        return mBody;
+        return mBody.trim();
     }
 
     public void setBody(String body) {

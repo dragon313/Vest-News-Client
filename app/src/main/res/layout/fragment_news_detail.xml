@@ -59,10 +59,11 @@
                     android:layout_marginTop="4dp"
                     android:background="@color/colorPrimaryDark"
                     android:ellipsize="end"
-                    android:maxLines="4"
+                    android:maxLines="5"
                     android:minHeight="?attr/actionBarSize"
                     android:padding="8dp"
                     android:textColor="@color/colorWhite"
+                    android:textSize="14sp"
                     />
             </net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
@@ -75,21 +76,69 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="8dp">
+                android:layout_margin="8dp"
+                app:cardElevation="8dp">
 
-                <WebView
-                    android:id="@+id/fragment_news_detail_body_text_view"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/Orange50"
-                    android:lineSpacingExtra="8dp"
-                    android:padding="8dp"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp"/>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/fragment_news_detail_rubric_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="Рубрика"
+                            android:textAlignment="gravity"/>
+
+                        <ImageView
+                            android:id="@+id/fragment_news_detail_view_counter_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_view"/>
+
+                        <TextView
+                            android:id="@+id/fragment_news_detail_view_counter_text_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="32dp"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center"
+                            android:text="1024"
+                            android:textAlignment="gravity"/>
+                    </FrameLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@color/colorGrayTransparent"
+                        />
+
+                    <WebView
+                        android:id="@+id/fragment_news_detail_body_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/Orange50"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="0dp"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"/>
+                </LinearLayout>
             </android.support.v7.widget.CardView>
-
-
         </android.support.v4.widget.NestedScrollView>
-
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.DrawerLayout>
