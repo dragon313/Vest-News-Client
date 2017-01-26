@@ -14,6 +14,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +39,7 @@ public class NewsDetailFragment extends Fragment {
     private Toolbar mToolbar;
     private TextView mToolbarTitle;
     private Intent mIntent;
-    private TextView mBodyTextView;
+    private WebView mBodyTextView;
     private ImageView mPhotoImageView;
 
     private AppBarLayout.LayoutParams mAppBarParams = null;
@@ -63,7 +64,7 @@ public class NewsDetailFragment extends Fragment {
         mToolbar = (Toolbar) v.findViewById(R.id.fragment_news_detail_toolbar);
         mToolbarTitle = (TextView) v.findViewById(R.id.fragment_news_detail_title_text_view);
         mPhotoImageView = (ImageView) v.findViewById(R.id.fragment_news_detail_photo_image_view);
-        mBodyTextView = (TextView) v.findViewById(R.id.fragment_news_detail_body_text_view);
+        mBodyTextView = (WebView) v.findViewById(R.id.fragment_news_detail_body_text_view);
         updateUI();
         return v;
     }
@@ -74,7 +75,8 @@ public class NewsDetailFragment extends Fragment {
                 .error(R.drawable.logo)
                 .into(mPhotoImageView);
         mToolbarTitle.setText(mIntent.getStringExtra(EXTRA_TITLE));
-        mBodyTextView.setText(Html.fromHtml(mIntent.getStringExtra(EXTRA_BODY)));
+//        mBodyTextView.setText(Html.fromHtml(mIntent.getStringExtra(EXTRA_BODY)));
+        mBodyTextView.loadData(mIntent.getStringExtra(EXTRA_BODY), "text/html; charset=utf-8", "UTF-8");
     }
 
     @Override
