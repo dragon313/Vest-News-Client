@@ -6,8 +6,14 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import java.util.List;
+
+import ru.vest_news.vest_news.model.NewsItem;
+import ru.vest_news.vest_news.utils.QueryPreferences;
+
 public class NewsService extends IntentService {
     private static final String TAG = "NewsService";
+
     public NewsService() {
         super(TAG);
     }
@@ -21,7 +27,18 @@ public class NewsService extends IntentService {
         if (!isNetworkAvailableAndConnected()) {
             return;
         }
-        Log.i(TAG, "Received an intent: " + intent);
+        String lastResultId = QueryPreferences.getPrefLastResultId(this);
+        List<NewsItem> items = new NewsFetcher().fetchItems();
+        if (items.size() == 0) {
+            return;
+        }
+        String resultId = items.get(0).getId();
+        if (resultId.equals(lastResultId)) {
+            Log.d(TAG, "Got an old result: " + resultId);
+        } else {
+            Log.d(TAG, "Got a new result:" + resultId);
+        }
+        QueryPreferences.setPrefLastResultId(this, resultId);
     }
 
     private boolean isNetworkAvailableAndConnected() {
