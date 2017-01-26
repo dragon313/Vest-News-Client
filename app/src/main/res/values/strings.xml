@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Весть-NEWS</string>
     <string name="news_title">Новости</string>
+    <string name="start_update">Уведомлять об обновлениях</string>
+    <string name="stop_update">Не уведомлять</string>
+    <string name="new_news_title">Новые новости от Весть-News</string>
+    <string name="new_news_text">На сайте Весть-News.ru появилась новая информация.</string>
 </resources>

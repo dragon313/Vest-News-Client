@@ -14,6 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -46,9 +49,7 @@ public class NewsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        new NewsParser().execute();
-        Intent i = NewsService.newIntent(getActivity());
-        getActivity().startService(i);
+        updateItems();
     }
 
     @Nullable
@@ -78,6 +79,36 @@ public class NewsListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setToolBar();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_news_list, menu);
+
+        MenuItem toggleItem = menu.findItem(R.id.menu_item_toggle_updating);
+        if (NewsService.isServiceAlarmOn(getActivity())) {
+            toggleItem.setTitle(R.string.stop_update);
+        } else {
+            toggleItem.setTitle(R.string.start_update);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // TODO: 026 26.01.17 Сделать из этого SwitchButton
+            case R.id.menu_item_toggle_updating:
+                boolean shouldStartAlarm = !NewsService.isServiceAlarmOn(getActivity());
+                NewsService.setServiceAlarm(getActivity(), shouldStartAlarm);
+                getActivity().invalidateOptionsMenu();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void updateItems() {
+        new NewsParser().execute();
     }
 
     private void setToolBar() {
