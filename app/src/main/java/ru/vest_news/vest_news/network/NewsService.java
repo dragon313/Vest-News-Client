@@ -14,6 +14,8 @@ import ru.vest_news.vest_news.utils.QueryPreferences;
 public class NewsService extends IntentService {
     private static final String TAG = "NewsService";
 
+    private static final int CONNECTION_INTERVAL = 1000 * 60; //60 секунд
+
     public NewsService() {
         super(TAG);
     }
