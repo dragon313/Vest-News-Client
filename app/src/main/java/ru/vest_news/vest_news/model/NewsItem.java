@@ -74,7 +74,10 @@ public class NewsItem {
     }
 
     public String getViews() {
-        return mViews;
+        if (mViews == null) {
+            return "0";
+        } else
+            return mViews;
     }
 
     public void setViews(String views) {
