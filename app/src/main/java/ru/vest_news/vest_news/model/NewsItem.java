@@ -58,7 +58,11 @@ public class NewsItem {
     }
 
     public String getRubric() {
-        return mRubric;
+        if (mRubric == null) {
+            return "";
+        } else {
+            return mRubric;
+        }
     }
 
     public void setRubric(String rubric) {
