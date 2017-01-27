@@ -32,10 +32,11 @@ import ru.vest_news.vest_news.model.NewsItem;
 import ru.vest_news.vest_news.network.NewsFetcher;
 import ru.vest_news.vest_news.network.NewsService;
 
-public class NewsListFragment extends Fragment {
+public class NewsListFragment extends VisibleFragment {
     private static final String TAG = "NewsListFragment";
 
     RecyclerView mNewsRecyclerView;
+    NewsAdapter mAdapter;
     Toolbar mToolbar;
     private List<NewsItem> mItems = new ArrayList<>();
 
@@ -119,7 +120,9 @@ public class NewsListFragment extends Fragment {
 
     private void setupAdapter() {
         if (isAdded()) {
-            mNewsRecyclerView.setAdapter(new NewsAdapter(mItems));
+            mAdapter = new NewsAdapter(mItems);
+            mAdapter.notifyDataSetChanged();
+            mNewsRecyclerView.setAdapter(mAdapter);
         }
     }
 
