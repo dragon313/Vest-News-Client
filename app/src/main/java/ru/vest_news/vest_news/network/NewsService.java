@@ -1,5 +1,6 @@
 package ru.vest_news.vest_news.network;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
@@ -27,6 +28,13 @@ public class NewsService extends IntentService {
 
     private static final int CONNECTION_INTERVAL = 1000 * 60; //60 секунд
 
+    public static final String ACTION_SHOW_NOTIFICATION =
+            "ru.vest_news.vest_news.network.ACTION_SHOW_NOTIFICATION";
+    public static final String PERM_PRIVATE =
+            "ru.vest_news.vest_news.PRIVATE";
+    public static final String REQUEST_CODE = "REQUEST_CODE";
+    public static final String NOTIFICATION = "NOTIFICATION";
+
     public NewsService() {
         super(TAG);
     }
@@ -49,6 +57,7 @@ public class NewsService extends IntentService {
             alarmManager.cancel(pi);
             pi.cancel();
         }
+        QueryPreferences.setAlarmOn(context, isOn);
     }
 
     public static boolean isServiceAlarmOn(Context context) {
@@ -89,12 +98,21 @@ public class NewsService extends IntentService {
                     .setSound(ringURI)
                     .setAutoCancel(true)
                     .build();
-            NotificationManagerCompat notificationManager =
-                    NotificationManagerCompat.from(this);
-            notificationManager.notify(0, notification);
-
+//            NotificationManagerCompat notificationManager =
+//                    NotificationManagerCompat.from(this);
+//            notificationManager.notify(0, notification);
+//
+//            sendBroadcast(new Intent(ACTION_SHOW_NOTIFICATION), PERM_PRIVATE);
+            showBackgroundNotification(0, notification);
         }
         QueryPreferences.setPrefLastResultId(this, resultId);
+    }
+
+    private void showBackgroundNotification(int requestCode, Notification notification) {
+        Intent i = new Intent(ACTION_SHOW_NOTIFICATION);
+        i.putExtra(REQUEST_CODE, requestCode);
+        i.putExtra(NOTIFICATION, notification);
+        sendOrderedBroadcast(i, PERM_PRIVATE, null, null, Activity.RESULT_OK, null, null);
     }
 
     private boolean isNetworkAvailableAndConnected() {
