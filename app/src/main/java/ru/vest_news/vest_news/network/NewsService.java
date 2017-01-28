@@ -29,7 +29,7 @@ public class NewsService extends IntentService {
     private static final int CONNECTION_INTERVAL = 1000 * 60; //60 секунд
 
     public static final String ACTION_SHOW_NOTIFICATION =
-            "ru.vest_news.vest_news.network.ACTION_SHOW_NOTIFICATION";
+            "ru.vest_news.vest_news.SHOW_NOTIFICATION";
     public static final String PERM_PRIVATE =
             "ru.vest_news.vest_news.PRIVATE";
     public static final String REQUEST_CODE = "REQUEST_CODE";
