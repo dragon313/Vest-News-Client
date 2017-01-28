@@ -119,7 +119,9 @@ public class NewsDetailFragment extends Fragment {
     public static Intent getIntent(Context context, NewsItem item) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
         intent.putExtra(EXTRA_TITLE, item.getTitle());
+        Log.d(TAG, "Title: " + item.getTitle());
         intent.putExtra(EXTRA_BODY, item.getBody());
+        Log.d(TAG, "Body: " + item.getBody());
         intent.putExtra(EXTRA_CREATED, item.getCreated());
         intent.putExtra(EXTRA_RUBRIC, item.getRubric());
         intent.putExtra(EXTRA_VIEWS, item.getViews());

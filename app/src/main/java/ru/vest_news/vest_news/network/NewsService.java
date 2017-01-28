@@ -20,6 +20,8 @@ import java.util.List;
 
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
+import ru.vest_news.vest_news.ui.NewsDetailActivity;
+import ru.vest_news.vest_news.ui.NewsDetailFragment;
 import ru.vest_news.vest_news.ui.NewsListActivity;
 import ru.vest_news.vest_news.utils.QueryPreferences;
 
@@ -82,8 +84,12 @@ public class NewsService extends IntentService {
         } else {
             Log.d(TAG, "Got a new result:" + resultId);
 
+            NewsItem newsItem = items.get(0);
             Resources resources = getResources();
-            Intent i = NewsListActivity.newIntent(this);
+//            Intent i = NewsListActivity.newIntent(this);
+            Intent i = NewsDetailActivity.newIntent(this, newsItem);
+//            Log.d(TAG, "Получен заголовок: " + items.get(0).getTitle());
+//            Log.d(TAG, "Получено тело новости: " + items.get(0).getBody());
             PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
             Uri ringURI =
                     RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
