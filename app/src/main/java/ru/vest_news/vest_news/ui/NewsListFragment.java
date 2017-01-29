@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,10 +38,10 @@ import ru.vest_news.vest_news.network.NewsService;
 public class NewsListFragment extends VisibleFragment {
     private static final String TAG = "NewsListFragment";
 
-    RecyclerView mNewsRecyclerView;
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    NewsAdapter mAdapter;
-    Toolbar mToolbar;
+    private RecyclerView mNewsRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private NewsAdapter mAdapter;
+    private Toolbar mToolbar;
     private List<NewsItem> mItems = new ArrayList<>();
 
 
@@ -219,6 +220,7 @@ public class NewsListFragment extends VisibleFragment {
 
         @Override
         protected void onPostExecute(List<NewsItem> newsItems) {
+//            Log.d(TAG, String.valueOf(mItems != null));
             mItems = newsItems;
             setupAdapter();
         }
