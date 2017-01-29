@@ -86,8 +86,8 @@ public class NewsService extends IntentService {
 
             NewsItem newsItem = items.get(0);
             Resources resources = getResources();
-//            Intent i = NewsListActivity.newIntent(this);
-            Intent i = NewsDetailActivity.newIntent(this, newsItem);
+            Intent i = NewsListActivity.newIntent(this);
+//            Intent i = NewsDetailActivity.newIntent(this, newsItem);
 //            Log.d(TAG, "Получен заголовок: " + items.get(0).getTitle());
 //            Log.d(TAG, "Получено тело новости: " + items.get(0).getBody());
             PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
