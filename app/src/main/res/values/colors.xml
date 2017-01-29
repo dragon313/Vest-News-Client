@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#d21500</color>
     <color name="colorPrimaryDark">#c7d21500</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="colorAccent">#c7d21500</color>
     <color name="list_item_separator_color">#c7d21500</color>
     <color name="colorWhite">#ECEFF1</color>
     <color name="colorBlack">#000</color>

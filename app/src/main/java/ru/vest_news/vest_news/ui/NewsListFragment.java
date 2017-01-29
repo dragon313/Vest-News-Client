@@ -89,9 +89,11 @@ public class NewsListFragment extends VisibleFragment {
 
         MenuItem toggleItem = menu.findItem(R.id.menu_item_toggle_updating);
         if (NewsService.isServiceAlarmOn(getActivity())) {
-            toggleItem.setTitle(R.string.stop_update);
+//            toggleItem.setTitle(R.string.stop_update);
+            toggleItem.setChecked(true);
         } else {
-            toggleItem.setTitle(R.string.start_update);
+//            toggleItem.setTitle(R.string.start_update);
+            toggleItem.setChecked(false);
         }
     }
 

@@ -3,7 +3,9 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_item_toggle_updating"
-        android:title="@string/start_update"
+        android:title="@string/notification"
+        android:checkable="true"
         app:showAsAction="never"/>
+
 
 </menu>
