@@ -33,11 +33,19 @@
             android:textStyle="bold"/>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fragment_news_list_recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fragment_news_list_swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ECEFF1">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_news_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ECEFF1">
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 </LinearLayout>

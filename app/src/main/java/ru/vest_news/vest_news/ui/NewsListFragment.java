@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +37,7 @@ public class NewsListFragment extends VisibleFragment {
     private static final String TAG = "NewsListFragment";
 
     RecyclerView mNewsRecyclerView;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     NewsAdapter mAdapter;
     Toolbar mToolbar;
     private List<NewsItem> mItems = new ArrayList<>();
@@ -58,6 +60,17 @@ public class NewsListFragment extends VisibleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_list, container, false);
         mToolbar = (Toolbar) v.findViewById(R.id.fragment_news_list_toolbar);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.fragment_news_list_swipe_container);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                updateItems();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
         mNewsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_news_list_recycler_view);
         mNewsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mNewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
