@@ -8,20 +8,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import java.util.List;
 
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.ui.NewsDetailActivity;
-import ru.vest_news.vest_news.ui.NewsDetailFragment;
 import ru.vest_news.vest_news.ui.NewsListActivity;
 import ru.vest_news.vest_news.utils.QueryPreferences;
 
@@ -90,20 +85,19 @@ public class NewsService extends IntentService {
 //            Intent i = NewsDetailActivity.newIntent(this, newsItem);
 //            Log.d(TAG, "Получен заголовок: " + items.get(0).getTitle());
 //            Log.d(TAG, "Получено тело новости: " + items.get(0).getBody());
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
-            Uri ringURI =
-                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
 
             Notification notification = new NotificationCompat.Builder(this)
                     .setTicker(resources.getString(R.string.new_news_title))
-                    .setSmallIcon(android.R.drawable.ic_menu_report_image)
+                    .setSmallIcon(R.drawable.ic_newspaper_report)
                     .setContentTitle(resources.getString(R.string.new_news_title))
                     .setContentText(items.get(0).getTitle())
                     .setContentIntent(pi)
-                    .setSound(ringURI)
+                    .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
                     .build();
+
 //            NotificationManagerCompat notificationManager =
 //                    NotificationManagerCompat.from(this);
 //            notificationManager.notify(0, notification);
