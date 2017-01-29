@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -71,13 +72,15 @@ public class NewsListFragment extends VisibleFragment {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         mNewsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_news_list_recycler_view);
+        mNewsRecyclerView.setHasFixedSize(true);
+        mNewsRecyclerView.setItemAnimator(itemAnimator);
         mNewsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mNewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                // TODO: 025 25.01.17 Написать подзагрузку новостей, если список прокручен до упора.
             }
 
             @Override
@@ -113,7 +116,7 @@ public class NewsListFragment extends VisibleFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            // TODO: 026 26.01.17 Сделать из этого SwitchButton
+
             case R.id.menu_item_toggle_updating:
                 boolean shouldStartAlarm = !NewsService.isServiceAlarmOn(getActivity());
                 NewsService.setServiceAlarm(getActivity(), shouldStartAlarm);
