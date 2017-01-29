@@ -86,7 +86,5 @@ public class NewsFetcher {
             item.setViews(row.getString("views"));
             items.add(item);
         }
-
-
     }
 }

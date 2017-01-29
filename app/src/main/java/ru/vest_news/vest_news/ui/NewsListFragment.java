@@ -140,8 +140,8 @@ public class NewsListFragment extends VisibleFragment {
     private void setupAdapter() {
         if (isAdded()) {
             mAdapter = new NewsAdapter(mItems);
-            mAdapter.notifyDataSetChanged();
             mNewsRecyclerView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -221,6 +221,7 @@ public class NewsListFragment extends VisibleFragment {
         @Override
         protected void onPostExecute(List<NewsItem> newsItems) {
 //            Log.d(TAG, String.valueOf(mItems != null));
+//            Проверять новые листы нужно здесь, но как нужно подумать.
             mItems = newsItems;
             setupAdapter();
         }
