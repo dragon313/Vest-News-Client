@@ -12,7 +12,7 @@
         android:id="@+id/fragment_news_detail_coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/Brown50"
+        android:background="@drawable/detail_fragment_background"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
@@ -47,6 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
                 </android.support.v7.widget.Toolbar>
 
@@ -62,7 +63,8 @@
                     android:minHeight="?attr/actionBarSize"
                     android:padding="8dp"
                     android:textColor="@color/colorWhite"
-                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
                     />
             </net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>

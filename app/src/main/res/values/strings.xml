@@ -6,4 +6,7 @@
     <string name="notification">Оповещение</string>
     <string name="new_news_title">Новые новости от Весть-News</string>
     <string name="new_news_text">На сайте Весть-News.ru появилась новая информация.</string>
+    <string name="share">Поделиться</string>
+    <string name="show_in_browser">Открыть в браузере</string>
+    <string name="send_via">Поделиться через:</string>
 </resources>
