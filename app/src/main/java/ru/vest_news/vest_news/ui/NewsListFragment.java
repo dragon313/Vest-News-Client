@@ -54,6 +54,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+        updateItems();
     }
 
     @Nullable
@@ -81,7 +82,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-        updateItems();
         setupAdapter();
         return v;
     }
@@ -121,9 +121,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     }
 
     private void updateItems() {
-        mSwipeRefreshLayout.setRefreshing(true);
         new NewsParser().execute();
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void setToolBar() {
@@ -142,7 +140,9 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
     @Override
     public void onRefresh() {
+        mSwipeRefreshLayout.setRefreshing(true);
         updateItems();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private class NewsAdapter extends RecyclerView.Adapter<NewsHolder> {
