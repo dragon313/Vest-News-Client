@@ -3,23 +3,24 @@ package ru.vest_news.vest_news.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -27,10 +28,12 @@ import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
+import ru.vest_news.vest_news.network.NewsFetcher;
 
 public class NewsDetailFragment extends Fragment {
     private static final String TAG = "NewsDetailFragment";
 
+    public static final String EXTRA_ID = "EXTRA_ID";
     public static final String EXTRA_TITLE = "EXTRA_TITLE";
     public static final String EXTRA_BODY = "EXTRA_BODY";
     public static final String EXTRA_CREATED = "EXTRA_CREATED";
@@ -42,11 +45,11 @@ public class NewsDetailFragment extends Fragment {
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private TextView mToolbarTitle;
     private Intent mIntent;
+    private ShareActionProvider mShareActionProvider;
     private WebView mBodyTextView;
     private ImageView mPhotoImageView;
     private TextView mRubricTextView;
     private TextView mViewCounterTextView;
-
 
 
     public static NewsDetailFragment newInstance() {
@@ -76,6 +79,46 @@ public class NewsDetailFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setToolBar();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_news_detail, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_detail_share_button:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, createShareText());
+                shareIntent.putExtra(Intent.EXTRA_HTML_TEXT, mIntent.getStringExtra(EXTRA_BODY));
+                shareIntent.setType("text/plain");
+                Intent chooser = Intent.createChooser(shareIntent, getString(R.string.send_via));
+                startActivity(chooser);
+                return true;
+            case R.id.menu_detail_show_in_browser:
+                Intent showInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(NewsFetcher.BASE_URI + "news/" + mIntent.getStringExtra(EXTRA_ID)));
+                startActivity(showInBrowser);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private String createShareText() {
+        StringBuilder newsText = new StringBuilder();
+        newsText.append(mIntent.getStringExtra(EXTRA_TITLE) + "\n");
+        newsText.append(NewsFetcher.BASE_URI + "news/" + mIntent.getStringExtra(EXTRA_ID));
+
+        return newsText.toString();
+    }
+
     private void updateUI() {
         Picasso.with(getActivity())
                 .load(mIntent.getStringExtra(EXTRA_PHOTO_FILE_PATH))
@@ -99,12 +142,6 @@ public class NewsDetailFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setToolBar();
-    }
-
     private void setToolBar() {
         NewsDetailActivity activity = (NewsDetailActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
@@ -113,15 +150,15 @@ public class NewsDetailFragment extends Fragment {
             activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("");
+            mToolbar.setSubtitleTextColor(getResources().getColor(R.color.colorWhite));
         }
     }
 
     public static Intent getIntent(Context context, NewsItem item) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
+        intent.putExtra(EXTRA_ID, item.getId());
         intent.putExtra(EXTRA_TITLE, item.getTitle());
-        Log.d(TAG, "Title: " + item.getTitle());
         intent.putExtra(EXTRA_BODY, item.getBody());
-        Log.d(TAG, "Body: " + item.getBody());
         intent.putExtra(EXTRA_CREATED, item.getCreated());
         intent.putExtra(EXTRA_RUBRIC, item.getRubric());
         intent.putExtra(EXTRA_VIEWS, item.getViews());

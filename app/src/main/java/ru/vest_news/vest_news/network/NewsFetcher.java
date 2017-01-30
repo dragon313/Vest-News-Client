@@ -22,6 +22,8 @@ public class NewsFetcher {
     private static final String TAG = "NewsFetcher";
     private static String NEWS_TO_LOAD = "50";
 
+    public static final String BASE_URI = "http://www.vest-news.ru/";
+
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -82,7 +84,7 @@ public class NewsFetcher {
             item.setCreated(row.getString("created"));
             item.setBody(row.getString("body"));
             item.setRubric(row.getString("rubric"));
-            item.setPhotoFilePath("http://www.vest-news.ru/" + row.getString("filepath"));
+            item.setPhotoFilePath(BASE_URI + row.getString("filepath"));
             item.setViews(row.getString("views"));
             items.add(item);
         }
