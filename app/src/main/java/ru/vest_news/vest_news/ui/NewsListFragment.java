@@ -35,7 +35,7 @@ import ru.vest_news.vest_news.model.NewsItem;
 import ru.vest_news.vest_news.network.NewsFetcher;
 import ru.vest_news.vest_news.network.NewsService;
 
-public class NewsListFragment extends VisibleFragment {
+public class NewsListFragment extends VisibleFragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NewsListFragment";
 
     private RecyclerView mNewsRecyclerView;
@@ -54,7 +54,6 @@ public class NewsListFragment extends VisibleFragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        updateItems();
     }
 
     @Nullable
@@ -65,14 +64,7 @@ public class NewsListFragment extends VisibleFragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.fragment_news_list_swipe_container);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
                 R.color.colorPrimaryDark);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mSwipeRefreshLayout.setRefreshing(true);
-                updateItems();
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         mNewsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_news_list_recycler_view);
         mNewsRecyclerView.setHasFixedSize(true);
@@ -89,6 +81,7 @@ public class NewsListFragment extends VisibleFragment {
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+        updateItems();
         setupAdapter();
         return v;
     }
@@ -128,7 +121,9 @@ public class NewsListFragment extends VisibleFragment {
     }
 
     private void updateItems() {
+        mSwipeRefreshLayout.setRefreshing(true);
         new NewsParser().execute();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void setToolBar() {
@@ -143,6 +138,11 @@ public class NewsListFragment extends VisibleFragment {
             mNewsRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        updateItems();
     }
 
     private class NewsAdapter extends RecyclerView.Adapter<NewsHolder> {
