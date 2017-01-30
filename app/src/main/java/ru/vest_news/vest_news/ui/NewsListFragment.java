@@ -89,6 +89,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     @Override
     public void onResume() {
         super.onResume();
+        updateItems();
         setToolBar();
     }
 
