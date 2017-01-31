@@ -147,7 +147,7 @@ public class NewsDetailFragment extends Fragment {
         activity.setSupportActionBar(mToolbar);
         ActionBar actionBar = activity.getSupportActionBar();
         if (actionBar != null) {
-            activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+            activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_left_arrow);
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("");
             mToolbar.setSubtitleTextColor(getResources().getColor(R.color.colorWhite));
