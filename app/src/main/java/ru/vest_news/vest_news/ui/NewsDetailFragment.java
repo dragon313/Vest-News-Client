@@ -128,6 +128,8 @@ public class NewsDetailFragment extends Fragment {
         mRubricTextView.setText(mIntent.getStringExtra(EXTRA_RUBRIC));
         mViewCounterTextView.setText(mIntent.getStringExtra(EXTRA_VIEWS));
         mBodyTextView.loadData(mIntent.getStringExtra(EXTRA_BODY).trim(), "text/html; charset=utf-8", "UTF-8");
+        String htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"fragment_detail_body_style.css\" />" + mIntent.getStringExtra(EXTRA_BODY).trim();
+        mBodyTextView.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null);
         mCollapsingToolbarLayout.post(new Runnable() {
             @Override
             public void run() {
