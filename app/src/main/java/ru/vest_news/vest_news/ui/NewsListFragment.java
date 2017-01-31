@@ -2,20 +2,16 @@ package ru.vest_news.vest_news.ui;
 
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +30,7 @@ import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
 import ru.vest_news.vest_news.network.NewsFetcher;
 import ru.vest_news.vest_news.network.NewsService;
+import uk.co.deanwild.flowtextview.FlowTextView;
 
 public class NewsListFragment extends VisibleFragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NewsListFragment";
@@ -89,6 +86,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     @Override
     public void onResume() {
         super.onResume();
+        updateItems();
         setToolBar();
     }
 
@@ -154,7 +152,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         @Override
         public NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.news_list_item, parent, false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.news_list_item_small, parent, false);
             return new NewsHolder(view);
         }
 
@@ -189,7 +187,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
             super(itemView);
             mTitleTextView = (TextView) itemView.findViewById(R.id.news_list_item_title);
             mPhotoImageView = (ImageView) itemView.findViewById(R.id.news_list_item_photo);
-            mBodyTextView = (TextView) itemView.findViewById(R.id.news_list_item_body_text_view);
+//            mBodyTextView = (TextView) itemView.findViewById(R.id.news_list_item_body_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.news_list_item_date_text_view);
             mRubricTextView = (TextView) itemView.findViewById(R.id.news_list_rubric_text_view);
             mViewCounterTextView = (TextView) itemView.findViewById(R.id.news_list_view_counter_text_view);
@@ -198,14 +196,14 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         public void bindNewsItem(NewsItem item) {
             mTitleTextView.setText(item.getTitle());
-            mBodyTextView.setText(Html.fromHtml(item.getBody()));
+//            mBodyTextView.setText(Html.fromHtml(item.getBody()));
             mDateTextView.setText(item.getDate());
             mRubricTextView.setText(item.getRubric());
             mViewCounterTextView.setText(item.getViews());
             Picasso.with(getActivity())
                     .load(Uri.parse(item.getPhotoFilePath()))
-                    .placeholder(R.drawable.logo)
-                    .error(R.drawable.logo)
+                    .placeholder(R.drawable.logo_rectangle)
+                    .error(R.drawable.logo_rectangle)
                     .into(mPhotoImageView);
         }
     }

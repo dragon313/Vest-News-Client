@@ -131,7 +131,7 @@
                         android:id="@+id/fragment_news_detail_body_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/Orange50"
+                        android:background="#ffffff"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="8dp"
