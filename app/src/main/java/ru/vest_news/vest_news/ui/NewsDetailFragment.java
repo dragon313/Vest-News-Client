@@ -122,7 +122,7 @@ public class NewsDetailFragment extends Fragment {
     private void updateUI() {
         Picasso.with(getActivity())
                 .load(mIntent.getStringExtra(EXTRA_PHOTO_FILE_PATH))
-                .error(R.drawable.logo)
+                .error(R.drawable.logo_rectangle)
                 .into(mPhotoImageView);
         mToolbarTitle.setText(mIntent.getStringExtra(EXTRA_TITLE));
         mRubricTextView.setText(mIntent.getStringExtra(EXTRA_RUBRIC));

@@ -10,5 +10,5 @@
         android:id="@+id/menu_detail_show_in_browser"
         android:icon="@drawable/ic_in_browser"
         android:title="@string/show_in_browser"
-        app:showAsAction="never"/>
+        app:showAsAction="ifRoom"/>
 </menu>

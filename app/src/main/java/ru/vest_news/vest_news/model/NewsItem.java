@@ -95,7 +95,7 @@ public class NewsItem {
 
     public String getDate() {
         Date date = new Date(Long.parseLong(mCreated + "000"));
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm", Locale.ROOT);
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         return format.format(date);
     }
 }
