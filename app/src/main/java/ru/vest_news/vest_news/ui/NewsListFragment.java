@@ -12,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +48,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private NewsAdapter mAdapter;
     private Toolbar mToolbar;
     private Drawer mDrawer;
+    private NewsLab mNewsLab = NewsLab.getInstance();
 
 
     public static NewsListFragment newInstance() {
@@ -173,6 +175,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                         inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                     }
+
                     @Override
                     public void onDrawerClosed(View drawerView) {
                     }
@@ -215,7 +218,8 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
     private void setupAdapter() {
         if (isAdded()) {
-            mAdapter = new NewsAdapter(NewsLab.getInstance().getItems());
+            mAdapter = new NewsAdapter(mNewsLab.getItems());
+            Log.d(TAG, "Новостей в листе: " + mNewsLab.getItems().size());
             mNewsRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
@@ -263,7 +267,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private class NewsHolder extends RecyclerView.ViewHolder {
         private TextView mTitleTextView;
         private ImageView mPhotoImageView;
-        //        private TextView mBodyTextView;
         private TextView mDateTextView;
         private TextView mRubricTextView;
         private TextView mViewCounterTextView;
@@ -275,7 +278,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
             mTitleTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Calibri.ttf");
             mTitleTextView.setTypeface(mTitleTypeFace);
             mPhotoImageView = (ImageView) itemView.findViewById(R.id.news_list_item_photo);
-//            mBodyTextView = (TextView) itemView.findViewById(R.id.news_list_item_body_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.news_list_item_date_text_view);
             mRubricTextView = (TextView) itemView.findViewById(R.id.news_list_rubric_text_view);
             mViewCounterTextView = (TextView) itemView.findViewById(R.id.news_list_view_counter_text_view);
@@ -284,7 +286,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         public void bindNewsItem(NewsItem item) {
             mTitleTextView.setText(item.getTitle());
-//            mBodyTextView.setText(Html.fromHtml(item.getBody()));
             mDateTextView.setText(item.getDate());
             mRubricTextView.setText(item.getRubric());
             mViewCounterTextView.setText(item.getViews());
@@ -295,21 +296,4 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                     .into(mPhotoImageView);
         }
     }
-
-//    private class NewsParser extends AsyncTask<Void, Void, List<NewsItem>> {
-//        private static final String TAG = "NewsParser";
-//
-//        @Override
-//        protected List<NewsItem> doInBackground(Void... params) {
-//            return new NewsFetcher().fetchItems();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<NewsItem> newsItems) {
-////            Log.d(TAG, String.valueOf(mItems != null));
-////            Проверять новые листы нужно здесь, но как нужно подумать.
-//            mItems = newsItems;
-//            setupAdapter();
-//        }
-//    }
 }

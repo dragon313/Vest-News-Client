@@ -1,6 +1,7 @@
 package ru.vest_news.vest_news.network;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import ru.vest_news.vest_news.utils.NewsLab;
 
 public class NewsPreLoader extends AsyncTask<Void, Void, List<NewsItem>> {
     private static final String TAG = "NewsParser";
+    private NewsLab mNewsLab = NewsLab.getInstance();
 
     @Override
     protected List<NewsItem> doInBackground(Void... params) {
@@ -17,6 +19,7 @@ public class NewsPreLoader extends AsyncTask<Void, Void, List<NewsItem>> {
 
     @Override
     protected void onPostExecute(List<NewsItem> newsItems) {
-        NewsLab.getInstance().setItems(newsItems);
+        mNewsLab.setItems(newsItems);
+        Log.d(TAG, "Новостей: " + mNewsLab.getItems().size());
     }
 }

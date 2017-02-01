@@ -28,11 +28,25 @@ public class SplashActivity extends AppCompatActivity {
         new Loading().execute();
     }
 
-    public class Loading extends AsyncTask<Void, Void, Void> {
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (hasFocus) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            }
+        }
+    }
+
+    private class Loading extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
 
             try {
+
                 Thread.sleep(2000);
             }catch (InterruptedException ie){
                 ie.printStackTrace();
@@ -46,19 +60,6 @@ public class SplashActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
             Intent intent = new Intent(getApplicationContext(), NewsListActivity.class);
             startActivity(intent);
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (hasFocus) {
-                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-            }
         }
     }
 }
