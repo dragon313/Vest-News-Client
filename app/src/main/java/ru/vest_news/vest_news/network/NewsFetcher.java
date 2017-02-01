@@ -2,7 +2,6 @@ package ru.vest_news.vest_news.network;
 
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Gallery;
 
 import org.json.JSONArray;
 import org.json.JSONException;

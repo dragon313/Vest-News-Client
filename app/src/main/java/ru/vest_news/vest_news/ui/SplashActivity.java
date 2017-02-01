@@ -26,9 +26,6 @@ public class SplashActivity extends AppCompatActivity {
 
         new NewsPreLoader().execute();
         new Loading().execute();
-
-//        Intent newsListIntent = new Intent(this, NewsListActivity.class);
-//        startActivity(newsListIntent);
     }
 
     public class Loading extends AsyncTask<Void, Void, Void> {

@@ -5,10 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,25 +23,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.network.NewsFetcher;
 import ru.vest_news.vest_news.network.NewsPreLoader;
 import ru.vest_news.vest_news.network.NewsService;
 import ru.vest_news.vest_news.utils.NewsLab;
@@ -56,7 +47,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private NewsAdapter mAdapter;
     private Toolbar mToolbar;
     private Drawer mDrawer;
-//    private List<NewsItem> mItems = new ArrayList<>();
 
 
     public static NewsListFragment newInstance() {
@@ -114,10 +104,8 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         MenuItem toggleItem = menu.findItem(R.id.menu_item_toggle_updating);
         if (NewsService.isServiceAlarmOn(getActivity())) {
-//            toggleItem.setTitle(R.string.stop_update);
             toggleItem.setChecked(true);
         } else {
-//            toggleItem.setTitle(R.string.start_update);
             toggleItem.setChecked(false);
         }
     }
@@ -223,10 +211,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                     }
                 })
                 .build();
-        //Данный код добавляет в тулбар кнопку назад и в этом фрагменте не нужен.
-//        result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
-//        NewsListActivity activity = (NewsListActivity) getActivity();
-//        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupAdapter() {
