@@ -90,7 +90,7 @@ public class NewsService extends IntentService {
 
             Notification notification = new NotificationCompat.Builder(this)
                     .setTicker(resources.getString(R.string.new_news_title))
-                    .setSmallIcon(R.drawable.ic_newspaper_report)
+                    .setSmallIcon(R.drawable.ic_news)
                     .setContentTitle(resources.getString(R.string.new_news_title))
                     .setContentText(items.get(0).getTitle())
                     .setContentIntent(pi)

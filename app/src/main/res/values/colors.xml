@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#d21500</color>
-    <color name="colorPrimaryDark">#b71c1c</color>
-    <!--<color name="colorAccent">#FF4081</color>-->
-    <color name="colorAccent">#b71c1c</color>
-    <color name="list_item_separator_color">#b71c1c</color>
+    <color name="colorPrimaryDark">#b6b71c1c</color>
+    <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorAccent">#b6b71c1c</color>-->
+    <color name="list_item_separator_color">#b6b71c1c</color>
     <color name="colorWhite">#eceff1</color>
     <color name="colorBlack">#000</color>
     <color name="colorGrayTransparent">#cf595959</color>
