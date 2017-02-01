@@ -10,4 +10,5 @@
     <color name="colorGrayTransparent">#cf595959</color>
     <color name="Orange50">#FFF3E0</color>
     <color name="Brown50">#EFEBE9</color>
+    <color name="colorBlackTransparent">#616161</color>
 </resources>

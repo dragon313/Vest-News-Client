@@ -2,6 +2,7 @@ package ru.vest_news.vest_news.ui;
 
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -178,14 +179,17 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private class NewsHolder extends RecyclerView.ViewHolder {
         private TextView mTitleTextView;
         private ImageView mPhotoImageView;
-        private TextView mBodyTextView;
+//        private TextView mBodyTextView;
         private TextView mDateTextView;
         private TextView mRubricTextView;
         private TextView mViewCounterTextView;
+        private Typeface mTitleTypeFace;
 
         public NewsHolder(View itemView) {
             super(itemView);
             mTitleTextView = (TextView) itemView.findViewById(R.id.news_list_item_title);
+            mTitleTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Calibri.ttf");
+            mTitleTextView.setTypeface(mTitleTypeFace);
             mPhotoImageView = (ImageView) itemView.findViewById(R.id.news_list_item_photo);
 //            mBodyTextView = (TextView) itemView.findViewById(R.id.news_list_item_body_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.news_list_item_date_text_view);
