@@ -186,9 +186,9 @@ public class NewsDetailFragment extends Fragment {
                 .withToolbar(mToolbar)
                 .withSelectedItem(-1)
                 .withHeader(R.layout.drawer_header)
-                .withActionBarDrawerToggle(false)
+                .withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
-                .withTranslucentStatusBar(false)
+                .withTranslucentStatusBar(true)
                 .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
                         news,
