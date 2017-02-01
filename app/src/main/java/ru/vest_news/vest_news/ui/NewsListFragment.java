@@ -12,7 +12,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +21,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,7 +40,6 @@ import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
 import ru.vest_news.vest_news.network.NewsFetcher;
 import ru.vest_news.vest_news.network.NewsService;
-import uk.co.deanwild.flowtextview.FlowTextView;
 
 public class NewsListFragment extends VisibleFragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NewsListFragment";
@@ -126,7 +134,76 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private void setToolBar() {
         NewsListActivity activity = (NewsListActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
-        mToolbar.setTitle("");
+        mToolbar.setTitle("Новости");
+        setUpNavigationDrawer();
+    }
+
+    private void setUpNavigationDrawer() {
+        PrimaryDrawerItem news = new PrimaryDrawerItem()
+                .withIdentifier(1)
+                .withName(R.string.drawer_item_news);
+        PrimaryDrawerItem weather = new PrimaryDrawerItem()
+                .withIdentifier(2)
+                .withName(R.string.drawer_item_weather);
+        SecondaryDrawerItem settings = new SecondaryDrawerItem()
+                .withIdentifier(3)
+                .withName(R.string.drawer_item_settings);
+        PrimaryDrawerItem contacts = new PrimaryDrawerItem()
+                .withIdentifier(4)
+                .withName(R.string.drawer_item_contacts);
+        SecondaryDrawerItem about = new SecondaryDrawerItem()
+                .withIdentifier(5)
+                .withName(R.string.drawer_item_about);
+
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(getActivity())
+                .addProfiles(
+                        new ProfileDrawerItem()
+                                .withName("ВЕСТЬ-NEWS")
+                                .withEmail("contact@vest-news.ru")
+                                .withTextColor(getResources().getColor(R.color.colorBlack))
+                                .withIcon(getResources().getDrawable(R.drawable.logo_rectangle))
+
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                        return false;
+                    }
+                })
+                .build();
+
+
+        Drawer result = new DrawerBuilder()
+                .withActivity(getActivity())
+                .withToolbar(mToolbar)
+                .withHeader(R.layout.drawer_header)
+                .withActionBarDrawerToggleAnimated(true)
+                .withTranslucentStatusBar(true)
+                .withHeader(R.layout.drawer_header)
+                .addDrawerItems(
+                        news,
+                        weather,
+                        contacts,
+                        new DividerDrawerItem(),
+                        settings,
+                        about
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+//                        switch ((int) drawerItem.getIdentifier()) {
+//                            case 1:
+//
+//                        }
+                        return true;
+                    }
+                })
+                .build();
+        //Данный код добавляет в тулбар кнопку назад и в этом фрагменте не нужен.
+//        result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
+//        NewsListActivity activity = (NewsListActivity) getActivity();
+//        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupAdapter() {
