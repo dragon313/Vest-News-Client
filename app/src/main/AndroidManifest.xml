@@ -36,7 +36,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".network.NotificationReceiver"
             android:exported="false">
@@ -44,6 +43,14 @@
                 <action android:name="ru.vest_news.vest_news.SHOW_NOTIFICATION"/>
             </intent-filter>
         </receiver>
+
+        <activity android:name=".ui.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
