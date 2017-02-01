@@ -44,7 +44,9 @@ import java.util.List;
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
 import ru.vest_news.vest_news.network.NewsFetcher;
+import ru.vest_news.vest_news.network.NewsPreLoader;
 import ru.vest_news.vest_news.network.NewsService;
+import ru.vest_news.vest_news.utils.NewsLab;
 
 public class NewsListFragment extends VisibleFragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NewsListFragment";
@@ -54,7 +56,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private NewsAdapter mAdapter;
     private Toolbar mToolbar;
     private Drawer mDrawer;
-    private List<NewsItem> mItems = new ArrayList<>();
+//    private List<NewsItem> mItems = new ArrayList<>();
 
 
     public static NewsListFragment newInstance() {
@@ -134,7 +136,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     }
 
     private void updateItems() {
-        new NewsParser().execute();
+        new NewsPreLoader().execute();
     }
 
     private void setToolBar() {
@@ -229,7 +231,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
     private void setupAdapter() {
         if (isAdded()) {
-            mAdapter = new NewsAdapter(mItems);
+            mAdapter = new NewsAdapter(NewsLab.getInstance().getItems());
             mNewsRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
@@ -310,21 +312,20 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         }
     }
 
-    private class NewsParser extends AsyncTask<Void, Void, List<NewsItem>> {
-        private static final String TAG = "NewsParser";
-
-        @Override
-        protected List<NewsItem> doInBackground(Void... params) {
-            return new NewsFetcher().fetchItems();
-        }
-
-        @Override
-        protected void onPostExecute(List<NewsItem> newsItems) {
-//            Log.d(TAG, String.valueOf(mItems != null));
-//            Проверять новые листы нужно здесь, но как нужно подумать.
-            mItems = newsItems;
-            setupAdapter();
-        }
-    }
-
+//    private class NewsParser extends AsyncTask<Void, Void, List<NewsItem>> {
+//        private static final String TAG = "NewsParser";
+//
+//        @Override
+//        protected List<NewsItem> doInBackground(Void... params) {
+//            return new NewsFetcher().fetchItems();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(List<NewsItem> newsItems) {
+////            Log.d(TAG, String.valueOf(mItems != null));
+////            Проверять новые листы нужно здесь, но как нужно подумать.
+//            mItems = newsItems;
+//            setupAdapter();
+//        }
+//    }
 }

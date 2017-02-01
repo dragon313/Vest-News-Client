@@ -1,16 +1,16 @@
 package ru.vest_news.vest_news.ui;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.util.List;
-
 import ru.vest_news.vest_news.R;
-import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.network.NewsFetcher;
+import ru.vest_news.vest_news.network.NewsPreLoader;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -24,25 +24,44 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        new NewsPreLoader().execute();
         new Loading().execute();
+
+//        Intent newsListIntent = new Intent(this, NewsListActivity.class);
+//        startActivity(newsListIntent);
     }
 
-    public class Loading extends AsyncTask<Void, Void, List<NewsItem>> {
-        private static final String TAG = "NewsParser";
-
+    public class Loading extends AsyncTask<Void, Void, Void> {
         @Override
-        protected List<NewsItem> doInBackground(Void... params) {
-            return new NewsFetcher().fetchItems();
+        protected Void doInBackground(Void... voids) {
+
+            try {
+                Thread.sleep(2000);
+            }catch (InterruptedException ie){
+                ie.printStackTrace();
+            }
+
+            return null;
         }
 
         @Override
-        protected void onPostExecute(List<NewsItem> newsItems) {
-//            Log.d(TAG, String.valueOf(mItems != null));
-//            Проверять новые листы нужно здесь, но как нужно подумать.
-//            mItems = newsItems;
-//            setupAdapter();
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Intent intent = new Intent(getApplicationContext(), NewsListActivity.class);
+            startActivity(intent);
         }
     }
-    }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (hasFocus) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+            }
+        }
+    }
 }
