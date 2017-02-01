@@ -1,6 +1,7 @@
 package ru.vest_news.vest_news.ui;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,10 +20,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.squareup.picasso.Picasso;
 
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
@@ -41,7 +51,9 @@ public class NewsDetailFragment extends Fragment {
     public static final String EXTRA_VIEWS = "EXTRA_VIEWS";
     public static final String EXTRA_PHOTO_FILE_PATH = "EXTRA_PHOTO_FILE_PATH";
 
+    private AppCompatActivity mActivity;
     private Toolbar mToolbar;
+    private Drawer mDrawer;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private TextView mToolbarTitle;
     private Intent mIntent;
@@ -83,6 +95,7 @@ public class NewsDetailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setToolBar();
+        setUpNavigationDrawer();
     }
 
     @Override
@@ -145,15 +158,93 @@ public class NewsDetailFragment extends Fragment {
     }
 
     private void setToolBar() {
-        NewsDetailActivity activity = (NewsDetailActivity) getActivity();
-        activity.setSupportActionBar(mToolbar);
-        ActionBar actionBar = activity.getSupportActionBar();
-        if (actionBar != null) {
-            activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_left_arrow);
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("");
-            mToolbar.setSubtitleTextColor(getResources().getColor(R.color.colorWhite));
-        }
+        mActivity = (NewsDetailActivity) getActivity();
+        mActivity.setSupportActionBar(mToolbar);
+        mToolbar.setTitle("");
+    }
+
+    private void setUpNavigationDrawer() {
+        PrimaryDrawerItem news = new PrimaryDrawerItem()
+                .withIdentifier(1)
+                .withName(R.string.drawer_item_news);
+        PrimaryDrawerItem weather = new PrimaryDrawerItem()
+                .withIdentifier(2)
+                .withName(R.string.drawer_item_weather);
+        SecondaryDrawerItem settings = new SecondaryDrawerItem()
+                .withIdentifier(3)
+                .withName(R.string.drawer_item_settings);
+        PrimaryDrawerItem contacts = new PrimaryDrawerItem()
+                .withIdentifier(4)
+                .withName(R.string.drawer_item_contacts);
+        SecondaryDrawerItem about = new SecondaryDrawerItem()
+                .withIdentifier(5)
+                .withName(R.string.drawer_item_about);
+
+
+        mDrawer = new DrawerBuilder()
+                .withActivity(getActivity())
+                .withToolbar(mToolbar)
+                .withSelectedItem(-1)
+                .withHeader(R.layout.drawer_header)
+                .withActionBarDrawerToggle(false)
+                .withActionBarDrawerToggleAnimated(true)
+                .withTranslucentStatusBar(false)
+                .withHeader(R.layout.drawer_header)
+                .addDrawerItems(
+                        news,
+                        weather,
+                        contacts,
+                        new DividerDrawerItem(),
+                        settings,
+                        about
+                )
+                .withOnDrawerListener(new Drawer.OnDrawerListener() {
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    }
+
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                    }
+
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                    }
+                })
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        switch ((int) drawerItem.getIdentifier()) {
+                            case 1:
+                                Intent newsIntent = new Intent(getContext(), NewsListActivity.class);
+                                startActivity(newsIntent);
+                                mDrawer.closeDrawer();
+                                return true;
+                            case 2:
+                                Toast.makeText(getActivity(), "Будет открыта активность Погода!", Toast.LENGTH_SHORT).show();
+                                mDrawer.closeDrawer();
+                                return true;
+                            case 3:
+                                Toast.makeText(getActivity(), "Будет открыта активность Настройки", Toast.LENGTH_SHORT).show();
+                                mDrawer.closeDrawer();
+                                return true;
+                            case 4:
+                                Toast.makeText(getActivity(), "Будет открыта активность Контакты", Toast.LENGTH_SHORT).show();
+                                mDrawer.closeDrawer();
+                                return true;
+                            case 5:
+                                Toast.makeText(getActivity(), "Будет открыта активность О приложении", Toast.LENGTH_SHORT).show();
+                                mDrawer.closeDrawer();
+                                return true;
+                            default:
+                                return true;
+                        }
+                    }
+                })
+                .build();
     }
 
     public static Intent getIntent(Context context, NewsItem item) {

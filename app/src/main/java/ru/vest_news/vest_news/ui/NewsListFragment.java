@@ -1,12 +1,14 @@
 package ru.vest_news.vest_news.ui;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,8 +20,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -29,6 +33,7 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.squareup.picasso.Picasso;
@@ -48,6 +53,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsAdapter mAdapter;
     private Toolbar mToolbar;
+    private Drawer mDrawer;
     private List<NewsItem> mItems = new ArrayList<>();
 
 
@@ -155,26 +161,8 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                 .withIdentifier(5)
                 .withName(R.string.drawer_item_about);
 
-        AccountHeader headerResult = new AccountHeaderBuilder()
-                .withActivity(getActivity())
-                .addProfiles(
-                        new ProfileDrawerItem()
-                                .withName("ВЕСТЬ-NEWS")
-                                .withEmail("contact@vest-news.ru")
-                                .withTextColor(getResources().getColor(R.color.colorBlack))
-                                .withIcon(getResources().getDrawable(R.drawable.logo_rectangle))
 
-                )
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-                        return false;
-                    }
-                })
-                .build();
-
-
-        Drawer result = new DrawerBuilder()
+        mDrawer = new DrawerBuilder()
                 .withActivity(getActivity())
                 .withToolbar(mToolbar)
                 .withHeader(R.layout.drawer_header)
@@ -182,21 +170,54 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                 .withTranslucentStatusBar(true)
                 .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
-                        news,
+                        news.withSetSelected(true),
                         weather,
                         contacts,
                         new DividerDrawerItem(),
                         settings,
                         about
                 )
+                .withOnDrawerListener(new Drawer.OnDrawerListener() {
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    }
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                    }
+
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                    }
+                })
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-//                        switch ((int) drawerItem.getIdentifier()) {
-//                            case 1:
-//
-//                        }
-                        return true;
+                        switch ((int) drawerItem.getIdentifier()) {
+                            case 1:
+                                mDrawer.closeDrawer();
+                                return true;
+                            case 2:
+                                Toast.makeText(getActivity(), "Будет открыта активность Погода!", Toast.LENGTH_SHORT).show();
+                                mDrawer.closeDrawer();
+                                return true;
+                            case 3:
+                                Toast.makeText(getActivity(), "Будет открыта активность Настройки", Toast.LENGTH_SHORT).show();
+                                mDrawer.closeDrawer();
+                                return true;
+                            case 4:
+                                Toast.makeText(getActivity(), "Будет открыта активность Контакты", Toast.LENGTH_SHORT).show();
+                                mDrawer.closeDrawer();
+                                return true;
+                            case 5:
+                                Toast.makeText(getActivity(), "Будет открыта активность О приложении", Toast.LENGTH_SHORT).show();
+                                mDrawer.closeDrawer();
+                                return true;
+                            default:
+                                return true;
+                        }
                     }
                 })
                 .build();
@@ -256,7 +277,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private class NewsHolder extends RecyclerView.ViewHolder {
         private TextView mTitleTextView;
         private ImageView mPhotoImageView;
-//        private TextView mBodyTextView;
+        //        private TextView mBodyTextView;
         private TextView mDateTextView;
         private TextView mRubricTextView;
         private TextView mViewCounterTextView;
