@@ -77,8 +77,22 @@ public class NewsFetcher {
 
     public NewsItem getNewsById(String newsId) {
         NewsItem item = new NewsItem();
-        String url = Uri.parse(BASE_NEWS_API_URL + "/" + newsId).toString();
+        try {
+            String url = Uri.parse(BASE_NEWS_API_URL + "/" + newsId).toString();
+            String jsonString = getUrlString(url);
+            Log.d(TAG, "Получен JASON конкретной новости: " + jsonString);
+            JSONObject jsonObject = new JSONObject(jsonString);
+            parseNews(item, jsonObject);
+        } catch (IOException e) {
+            Log.e(TAG, "Filed to download news", e);
+        } catch (JSONException e) {
+            Log.e(TAG, "Filed to parse JSON", e);
+        }
         return null;
+    }
+
+    private void parseNews(NewsItem item, JSONObject jsonObject) throws JSONException {
+        Log.d(TAG, "Заголовок новости под кликом: " + jsonObject.getString("head_title"));
     }
 
     private void parseItems(List<NewsItem> items, JSONObject jsonBody) throws IOException, JSONException {

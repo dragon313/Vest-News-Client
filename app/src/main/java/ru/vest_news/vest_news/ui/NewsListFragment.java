@@ -36,6 +36,7 @@ import java.util.List;
 
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
+import ru.vest_news.vest_news.network.NewsFetcher;
 import ru.vest_news.vest_news.network.NewsPreLoader;
 import ru.vest_news.vest_news.network.NewsService;
 import ru.vest_news.vest_news.utils.NewsLab;
@@ -257,8 +258,9 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item);
-                    startActivity(detailIntent);
+                    new NewsFetcher().getLastNewsId();
+//                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item);
+//                    startActivity(detailIntent);
                 }
             });
             holder.bindNewsItem(item);
