@@ -219,7 +219,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private void setupAdapter() {
         if (isAdded()) {
             mAdapter = new NewsAdapter(mNewsLab.getItems());
-            Log.d(TAG, "Новостей в листе: " + mNewsLab.getItems().size());
+            Log.d(TAG, "Id первой новости: " + mNewsLab.getItems().get(0).getId());
             mNewsRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
@@ -229,6 +229,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     public void onRefresh() {
         mSwipeRefreshLayout.setRefreshing(true);
         updateItems();
+        setupAdapter();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

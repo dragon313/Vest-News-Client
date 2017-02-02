@@ -216,8 +216,7 @@ public class NewsDetailFragment extends Fragment {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch ((int) drawerItem.getIdentifier()) {
                             case 1:
-                                Intent newsIntent = new Intent(getContext(), NewsListActivity.class);
-                                startActivity(newsIntent);
+                                getActivity().finish();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 2:

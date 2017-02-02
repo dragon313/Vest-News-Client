@@ -24,7 +24,6 @@
         </activity>
         <activity
             android:name=".ui.NewsDetailActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".ui.NewsListActivity">
         </activity>
 
