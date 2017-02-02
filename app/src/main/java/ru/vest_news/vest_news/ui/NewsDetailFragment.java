@@ -8,12 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -219,8 +216,7 @@ public class NewsDetailFragment extends Fragment {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch ((int) drawerItem.getIdentifier()) {
                             case 1:
-                                Intent newsIntent = new Intent(getContext(), NewsListActivity.class);
-                                startActivity(newsIntent);
+                                getActivity().finish();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 2:

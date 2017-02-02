@@ -48,8 +48,6 @@ public class NewsService extends IntentService {
 
         if (isOn) {
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
-//            Данный варант будет выводить устройство из спящего режима.
-//            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), CONNECTION_INTERVAL, pi);
         } else {
             alarmManager.cancel(pi);
             pi.cancel();
@@ -79,12 +77,8 @@ public class NewsService extends IntentService {
         } else {
             Log.d(TAG, "Got a new result:" + resultId);
 
-            NewsItem newsItem = items.get(0);
             Resources resources = getResources();
             Intent i = NewsListActivity.newIntent(this);
-//            Intent i = NewsDetailActivity.newIntent(this, newsItem);
-//            Log.d(TAG, "Получен заголовок: " + items.get(0).getTitle());
-//            Log.d(TAG, "Получено тело новости: " + items.get(0).getBody());
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
@@ -98,11 +92,6 @@ public class NewsService extends IntentService {
                     .setAutoCancel(true)
                     .build();
 
-//            NotificationManagerCompat notificationManager =
-//                    NotificationManagerCompat.from(this);
-//            notificationManager.notify(0, notification);
-//
-//            sendBroadcast(new Intent(ACTION_SHOW_NOTIFICATION), PERM_PRIVATE);
             showBackgroundNotification(0, notification);
         }
         QueryPreferences.setPrefLastResultId(this, resultId);
