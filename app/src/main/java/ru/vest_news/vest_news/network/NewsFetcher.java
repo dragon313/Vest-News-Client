@@ -75,12 +75,12 @@ public class NewsFetcher {
         return items;
     }
 
-    public NewsItem getNewsById(String newsId) {
+    public NewsItem fetchNewsById(String newsId) {
         NewsItem item = new NewsItem();
         try {
             String url = Uri.parse(BASE_NEWS_API_URL + "/" + newsId).toString();
             String jsonString = getUrlString(url);
-            Log.d(TAG, "Получен JASON конкретной новости: " + jsonString);
+            Log.d(TAG, "Получен JSON конкретной новости: " + jsonString);
             JSONObject jsonObject = new JSONObject(jsonString);
             parseNews(item, jsonObject);
         } catch (IOException e) {
@@ -88,11 +88,27 @@ public class NewsFetcher {
         } catch (JSONException e) {
             Log.e(TAG, "Filed to parse JSON", e);
         }
-        return null;
+        return item;
     }
 
-    private void parseNews(NewsItem item, JSONObject jsonObject) throws JSONException {
-        Log.d(TAG, "Заголовок новости под кликом: " + jsonObject.getString("head_title"));
+    private void parseNews(NewsItem item, JSONObject baseJsonObject) throws JSONException {
+        item.setTitle(baseJsonObject.getString("head_title"));
+        Log.d(TAG, "Заголовок новости под кликом: " + baseJsonObject.getString("head_title"));
+        JSONObject article = baseJsonObject.getJSONObject("article");
+        item.setId(article.getString("nid"));
+        item.setType(article.getString("type"));
+        item.setCreated(article.getString("created"));
+        item.setBody(article.getString("body"));
+        item.setRubric(article.getString("rubric"));
+        item.setPhotoFilePath(article.getString("filepath"));
+        item.setViews(article.getString("views"));
+        JSONArray images = article.getJSONArray("images");
+        ArrayList<String> photoPaths = new ArrayList<>();
+        for (int i = 0; i < images.length(); i++) {
+            JSONObject imagePath = images.getJSONObject(i);
+            photoPaths.add(BASE_URI + imagePath.getString("filepath"));
+        }
+        item.setPhotoFilePaths(photoPaths);
     }
 
     private void parseItems(List<NewsItem> items, JSONObject jsonBody) throws IOException, JSONException {

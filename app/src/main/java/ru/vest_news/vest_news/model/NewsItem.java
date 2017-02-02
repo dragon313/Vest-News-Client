@@ -75,16 +75,15 @@ public class NewsItem {
         return mPhotoFilePath;
     }
 
+    public void setPhotoFilePath(String photoFilePath) {
+        mPhotoFilePath = photoFilePath;
+    }
+
     public ArrayList<String> getPhotoFilePaths() {
         return mPhotoFilePaths;
     }
-
     public void setPhotoFilePaths(ArrayList<String> photoFilePaths) {
         mPhotoFilePaths = photoFilePaths;
-    }
-
-    public void setPhotoFilePath(String photoFilePath) {
-        mPhotoFilePath = photoFilePath;
     }
 
     public String getViews() {
@@ -107,5 +106,9 @@ public class NewsItem {
         Date date = new Date(Long.parseLong(mCreated + "000"));
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         return format.format(date);
+    }
+
+    public void addPhotoFilePath(String path) {
+        mPhotoFilePaths.add(path);
     }
 }

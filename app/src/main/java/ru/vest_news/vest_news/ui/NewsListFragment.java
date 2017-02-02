@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -258,9 +259,8 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new NewsFetcher().getLastNewsId();
-//                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item);
-//                    startActivity(detailIntent);
+                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item.getId());
+                    startActivity(detailIntent);
                 }
             });
             holder.bindNewsItem(item);
