@@ -235,7 +235,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     public void onRefresh() {
         mSwipeRefreshLayout.setRefreshing(true);
         updateItems();
-        setupAdapter();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 

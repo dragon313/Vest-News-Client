@@ -75,6 +75,12 @@ public class NewsFetcher {
         return items;
     }
 
+    public NewsItem getNewsById(String newsId) {
+        NewsItem item = new NewsItem();
+        String url = Uri.parse(BASE_NEWS_API_URL + "/" + newsId).toString();
+        return null;
+    }
+
     private void parseItems(List<NewsItem> items, JSONObject jsonBody) throws IOException, JSONException {
         JSONArray rows = jsonBody.getJSONArray("rows");
         for (int i = 0; i < rows.length(); i++) {

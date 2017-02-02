@@ -3,6 +3,7 @@ package ru.vest_news.vest_news.model;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -15,6 +16,7 @@ public class NewsItem {
     private String mBody;
     private String mRubric;
     private String mPhotoFilePath;
+    private ArrayList<String> mPhotoFilePaths;
     private String mViews;
 
     public String getTitle() {
@@ -71,6 +73,14 @@ public class NewsItem {
 
     public String getPhotoFilePath() {
         return mPhotoFilePath;
+    }
+
+    public ArrayList<String> getPhotoFilePaths() {
+        return mPhotoFilePaths;
+    }
+
+    public void setPhotoFilePaths(ArrayList<String> photoFilePaths) {
+        mPhotoFilePaths = photoFilePaths;
     }
 
     public void setPhotoFilePath(String photoFilePath) {
