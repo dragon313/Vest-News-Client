@@ -47,7 +47,8 @@ public class NewsService extends IntentService {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         if (isOn) {
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+//            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), CONNECTION_INTERVAL, pi);
         } else {
             alarmManager.cancel(pi);
             pi.cancel();
@@ -67,16 +68,15 @@ public class NewsService extends IntentService {
             return;
         }
         String lastResultId = QueryPreferences.getPrefLastResultId(this);
-        List<NewsItem> items = new NewsFetcher().fetchItems();
-        if (items.size() == 0) {
+        String resultId = new NewsFetcher().getLastNewsId();
+        if (resultId.length()==0) {
             return;
         }
-        String resultId = items.get(0).getId();
         if (resultId.equals(lastResultId)) {
             Log.d(TAG, "Got an old result: " + resultId);
         } else {
             Log.d(TAG, "Got a new result:" + resultId);
-
+            List<NewsItem> items = new NewsFetcher().fetchItems();
             Resources resources = getResources();
             Intent i = NewsListActivity.newIntent(this);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

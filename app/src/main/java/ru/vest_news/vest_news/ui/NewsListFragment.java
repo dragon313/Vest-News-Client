@@ -60,7 +60,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        updateItems();
     }
 
     @Nullable
@@ -95,7 +94,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     @Override
     public void onResume() {
         super.onResume();
-        updateItems();
+//        updateItems();
         setToolBar();
     }
 

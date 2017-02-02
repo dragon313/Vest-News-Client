@@ -65,7 +65,6 @@ public class NewsFetcher {
                     .build().toString();
             String jsonString = getUrlString(url);
             Log.d(TAG, "Received JSON: " + jsonString);
-            getLastNewsId();
             JSONObject jsonBody = new JSONObject(jsonString);
             parseItems(items, jsonBody);
         } catch (IOException e) {
