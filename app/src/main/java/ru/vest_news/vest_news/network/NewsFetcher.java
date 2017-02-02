@@ -76,9 +76,7 @@ public class NewsFetcher {
     }
 
     private void parseItems(List<NewsItem> items, JSONObject jsonBody) throws IOException, JSONException {
-
         JSONArray rows = jsonBody.getJSONArray("rows");
-//        Log.d(TAG, "Доступно новостей: " + rows.length());
         for (int i = 0; i < rows.length(); i++) {
             NewsItem item = new NewsItem();
             JSONObject row = rows.getJSONObject(i);

@@ -49,6 +49,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private Toolbar mToolbar;
     private Drawer mDrawer;
     private NewsLab mNewsLab = NewsLab.getInstance();
+    private boolean isFirstStart = true;
 
 
     public static NewsListFragment newInstance() {
@@ -94,7 +95,13 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     @Override
     public void onResume() {
         super.onResume();
-//        updateItems();
+        if (isFirstStart) {
+            Log.d(TAG, "Первый запуск");
+            isFirstStart = false;
+        } else {
+            Log.d(TAG, "Непервый запуск");
+            updateItems();
+        }
         setToolBar();
     }
 
@@ -126,6 +133,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
     private void updateItems() {
         new NewsPreLoader().execute();
+        setupAdapter();
     }
 
     private void setToolBar() {
@@ -218,7 +226,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private void setupAdapter() {
         if (isAdded()) {
             mAdapter = new NewsAdapter(mNewsLab.getItems());
-            Log.d(TAG, "Id первой новости: " + mNewsLab.getItems().get(0).getId());
             mNewsRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
