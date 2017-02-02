@@ -22,6 +22,10 @@ public class NewsFetcher {
     private static String NEWS_TO_LOAD = "50";
 
     public static final String BASE_URI = "http://www.vest-news.ru/";
+    private static final String BASE_NEWS_API_URL = "http://www.vest-news.ru/api/news";
+    private static final String LAST_NEWS_ID_URL = "http://www.vest-news.ru/api/last-news-item-id";
+    private static final String P_LIMIT = "limit";
+
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -55,12 +59,13 @@ public class NewsFetcher {
     public List<NewsItem> fetchItems() {
         List<NewsItem> items = new ArrayList<>();
         try {
-            String url = Uri.parse("http://www.vest-news.ru/api/news")
+            String url = Uri.parse(BASE_NEWS_API_URL)
                     .buildUpon()
-                    .appendQueryParameter("limit", NEWS_TO_LOAD)
+                    .appendQueryParameter(P_LIMIT, NEWS_TO_LOAD)
                     .build().toString();
             String jsonString = getUrlString(url);
             Log.d(TAG, "Received JSON: " + jsonString);
+            getLastNewsId();
             JSONObject jsonBody = new JSONObject(jsonString);
             parseItems(items, jsonBody);
         } catch (IOException e) {
@@ -74,7 +79,7 @@ public class NewsFetcher {
     private void parseItems(List<NewsItem> items, JSONObject jsonBody) throws IOException, JSONException {
 
         JSONArray rows = jsonBody.getJSONArray("rows");
-        Log.d(TAG, "Доступно новостей: " + rows.length());
+//        Log.d(TAG, "Доступно новостей: " + rows.length());
         for (int i = 0; i < rows.length(); i++) {
             NewsItem item = new NewsItem();
             JSONObject row = rows.getJSONObject(i);
@@ -87,5 +92,18 @@ public class NewsFetcher {
             item.setViews(row.getString("views"));
             items.add(item);
         }
+    }
+
+    public String getLastNewsId() {
+        String lastIdString = "";
+        try {
+            String url = Uri.parse(LAST_NEWS_ID_URL).toString();
+            String jsonString = getUrlString(url);
+            lastIdString = jsonString.replace('\"', ' ').trim();
+            Log.d(TAG, "Last news id: " + lastIdString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastIdString;
     }
 }
