@@ -81,6 +81,7 @@ public class NewsDetailFragment extends Fragment {
     private void loadNewsInfo() {
         mIntent = getActivity().getIntent();
         String id = mIntent.getStringExtra(EXTRA_ID);
+//        new NewsLoader().execute(id);
         try {
             mItem = new NewsLoader().execute(id).get(); //Тут инициализируется переменная mItem.
         } catch (InterruptedException e) {
@@ -281,7 +282,7 @@ public class NewsDetailFragment extends Fragment {
         return intent;
     }
 
-    public class NewsLoader extends AsyncTask<String, Void, NewsItem> {
+    private class NewsLoader extends AsyncTask<String, Void, NewsItem> {
 
         @Override
         protected NewsItem doInBackground(String... params) {
@@ -290,6 +291,7 @@ public class NewsDetailFragment extends Fragment {
 
         @Override
         protected void onPostExecute(NewsItem item) {
+            mItem = item;
             super.onPostExecute(item);
 //            Log.d(TAG, "Размер путей: " + item.getPhotoFilePaths().size());
 //            mItem = item;

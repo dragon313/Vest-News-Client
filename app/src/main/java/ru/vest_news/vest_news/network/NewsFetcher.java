@@ -88,6 +88,7 @@ public class NewsFetcher {
         } catch (JSONException e) {
             Log.e(TAG, "Filed to parse JSON", e);
         }
+        Log.d(TAG, "Item is null = " + (item == null) + "Item Id = " + item.getId());
         return item;
     }
 
@@ -109,6 +110,7 @@ public class NewsFetcher {
             photoPaths.add(BASE_URI + imagePath.getString("filepath"));
         }
         item.setPhotoFilePaths(photoPaths);
+
     }
 
     private void parseItems(List<NewsItem> items, JSONObject jsonBody) throws IOException, JSONException {
