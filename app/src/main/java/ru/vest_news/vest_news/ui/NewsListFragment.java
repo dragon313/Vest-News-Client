@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -166,12 +167,14 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         mDrawer = new DrawerBuilder()
                 .withActivity(getActivity())
                 .withToolbar(mToolbar)
+                .withSelectedItem(-1)
                 .withHeader(R.layout.drawer_header)
+                .withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withTranslucentStatusBar(true)
                 .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
-                        news.withSetSelected(true),
+                        news,
                         weather,
                         contacts,
                         new DividerDrawerItem(),
@@ -283,8 +286,10 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         public NewsHolder(View itemView) {
             super(itemView);
             mTitleTextView = (TextView) itemView.findViewById(R.id.news_list_item_title);
-            mTitleTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Calibri.ttf");
-            mTitleTextView.setTypeface(mTitleTypeFace);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                mTitleTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Calibri.ttf");
+                mTitleTextView.setTypeface(mTitleTypeFace);
+            }
             mPhotoImageView = (ImageView) itemView.findViewById(R.id.news_list_item_photo);
             mDateTextView = (TextView) itemView.findViewById(R.id.news_list_item_date_text_view);
             mRubricTextView = (TextView) itemView.findViewById(R.id.news_list_rubric_text_view);
