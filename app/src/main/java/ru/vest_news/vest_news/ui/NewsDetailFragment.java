@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -45,29 +46,25 @@ public class NewsDetailFragment extends Fragment {
     private static final String TAG = "NewsDetailFragment";
 
     public static final String EXTRA_ID = "EXTRA_ID";
-    public static final String EXTRA_TITLE = "EXTRA_TITLE";
-    public static final String EXTRA_BODY = "EXTRA_BODY";
-    public static final String EXTRA_CREATED = "EXTRA_CREATED";
-    public static final String EXTRA_RUBRIC = "EXTRA_RUBRIC";
-    public static final String EXTRA_VIEWS = "EXTRA_VIEWS";
-    public static final String EXTRA_PHOTO_FILE_PATH = "EXTRA_PHOTO_FILE_PATH";
 
-    private AppCompatActivity mActivity;
     private NewsItem mItem;
     private Toolbar mToolbar;
     private Drawer mDrawer;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private TextView mToolbarTitle;
-    private Intent mIntent;
-    private ShareActionProvider mShareActionProvider;
     private WebView mBodyTextView;
     private ImageView mPhotoImageView;
     private TextView mRubricTextView;
     private TextView mViewCounterTextView;
+    private Handler mHandler;
 
 
     public static NewsDetailFragment newInstance() {
         return new NewsDetailFragment();
+    }
+
+    public NewsDetailFragment() {
+        mHandler = new Handler(); //Будет применён для загрузки отдельной новости.
     }
 
     @Override
@@ -75,28 +72,23 @@ public class NewsDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        Log.d(TAG, "mItem is null = " + (mItem == null));
     }
 
     private void loadNewsInfo() {
-        mIntent = getActivity().getIntent();
-        String id = mIntent.getStringExtra(EXTRA_ID);
-//        new NewsLoader().execute(id);
+        Intent intent = getActivity().getIntent();
+        String id = intent.getStringExtra(EXTRA_ID);
+        //Вот тут реализовать загрузку отдельной новости в паралельном потоке используя mHandler.
         try {
             mItem = new NewsLoader().execute(id).get(); //Тут инициализируется переменная mItem.
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "loadNewsInfo() mItem is null = " + (mItem == null));
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_detail, container, false);
-        Log.d(TAG, "mItem is null = " + (mItem == null));
         loadNewsInfo();
         initUI(v);
         updateUI();
@@ -158,7 +150,7 @@ public class NewsDetailFragment extends Fragment {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_TEXT, createShareText());
-                shareIntent.putExtra(Intent.EXTRA_HTML_TEXT, mIntent.getStringExtra(EXTRA_BODY));
+                shareIntent.putExtra(Intent.EXTRA_HTML_TEXT, mItem.getBody());
                 shareIntent.setType("text/plain");
                 Intent chooser = Intent.createChooser(shareIntent, getString(R.string.send_via));
                 startActivity(chooser);
@@ -181,8 +173,8 @@ public class NewsDetailFragment extends Fragment {
 
 
     private void setToolBar() {
-        mActivity = (NewsDetailActivity) getActivity();
-        mActivity.setSupportActionBar(mToolbar);
+        AppCompatActivity activity = (NewsDetailActivity) getActivity();
+        activity.setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
     }
 
