@@ -205,19 +205,19 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                                 mDrawer.closeDrawer();
                                 return true;
                             case 2:
-                                Toast.makeText(getActivity(), "Будет открыта активность Погода!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 3:
-                                Toast.makeText(getActivity(), "Будет открыта активность Настройки", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 4:
-                                Toast.makeText(getActivity(), "Будет открыта активность Контакты", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 5:
-                                Toast.makeText(getActivity(), "Будет открыта активность О приложении", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             default:

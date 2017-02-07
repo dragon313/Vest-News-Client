@@ -88,7 +88,6 @@ public class NewsFetcher {
         } catch (JSONException e) {
             Log.e(TAG, "Filed to parse JSON", e);
         }
-        Log.d(TAG, "Item is null = " + (item == null) + "Item Id = " + item.getId());
         return item;
     }
 

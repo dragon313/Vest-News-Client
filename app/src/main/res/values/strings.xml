@@ -14,4 +14,5 @@
     <string name="drawer_item_contacts">Контакты</string>
     <string name="drawer_item_about">О приложении</string>
     <string name="drawer_item_weather">Погода</string>
+    <string name="development_in_progress">Раздел в разработке</string>
 </resources>

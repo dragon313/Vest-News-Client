@@ -135,7 +135,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingTop="8dp"
-                        android:paddingBottom="0dp"
+                        android:paddingBottom="32dp"
                         android:textColor="@color/colorBlack"
                         android:textSize="14sp"/>
                 </LinearLayout>
