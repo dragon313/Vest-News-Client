@@ -11,7 +11,7 @@ import ru.vest_news.vest_news.model.NewsItem;
 public class NewsDetailActivity extends SingleFragmentActivity {
 
     public static Intent newIntent(Context context, NewsItem item) {
-        return NewsDetailFragment.getIntent(context, item);
+        return NewsDetailFragment.getIntent(context, item.getId());
     }
 
     @Override

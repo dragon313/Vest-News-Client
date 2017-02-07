@@ -5,12 +5,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +36,8 @@ import com.squareup.picasso.Picasso;
 
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
+import java.util.concurrent.ExecutionException;
+
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
 import ru.vest_news.vest_news.network.NewsFetcher;
@@ -41,42 +46,56 @@ public class NewsDetailFragment extends Fragment {
     private static final String TAG = "NewsDetailFragment";
 
     public static final String EXTRA_ID = "EXTRA_ID";
-    public static final String EXTRA_TITLE = "EXTRA_TITLE";
-    public static final String EXTRA_BODY = "EXTRA_BODY";
-    public static final String EXTRA_CREATED = "EXTRA_CREATED";
-    public static final String EXTRA_RUBRIC = "EXTRA_RUBRIC";
-    public static final String EXTRA_VIEWS = "EXTRA_VIEWS";
-    public static final String EXTRA_PHOTO_FILE_PATH = "EXTRA_PHOTO_FILE_PATH";
 
-    private AppCompatActivity mActivity;
+    private NewsItem mItem;
     private Toolbar mToolbar;
     private Drawer mDrawer;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private TextView mToolbarTitle;
-    private Intent mIntent;
-    private ShareActionProvider mShareActionProvider;
     private WebView mBodyTextView;
     private ImageView mPhotoImageView;
     private TextView mRubricTextView;
     private TextView mViewCounterTextView;
+    private Handler mHandler;
 
 
     public static NewsDetailFragment newInstance() {
         return new NewsDetailFragment();
     }
 
+    public NewsDetailFragment() {
+        mHandler = new Handler(); //Будет применён для загрузки отдельной новости.
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mIntent = getActivity().getIntent();
         setRetainInstance(true);
         setHasOptionsMenu(true);
+    }
+
+    private void loadNewsInfo() {
+        Intent intent = getActivity().getIntent();
+        String id = intent.getStringExtra(EXTRA_ID);
+        //Вот тут реализовать загрузку отдельной новости в паралельном потоке используя mHandler.
+        try {
+            mItem = new NewsLoader().execute(id).get(); //Тут инициализируется переменная mItem.
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_detail, container, false);
+        loadNewsInfo();
+        initUI(v);
+        updateUI();
+        return v;
+    }
+
+    private void initUI(View v) {
         mToolbar = (Toolbar) v.findViewById(R.id.fragment_news_detail_toolbar);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) v.findViewById(R.id.fragment_news_detail_collapsing_toolbar);
         mToolbarTitle = (TextView) v.findViewById(R.id.fragment_news_detail_title_text_view);
@@ -84,8 +103,31 @@ public class NewsDetailFragment extends Fragment {
         mRubricTextView = (TextView) v.findViewById(R.id.fragment_news_detail_rubric_text_view);
         mViewCounterTextView = (TextView) v.findViewById(R.id.fragment_news_detail_view_counter_text_view);
         mBodyTextView = (WebView) v.findViewById(R.id.fragment_news_detail_body_text_view);
-        updateUI();
-        return v;
+    }
+
+    private void updateUI() {
+        Picasso.with(getActivity())
+                .load(mItem.getPhotoFilePaths().get(0))
+                .error(R.drawable.logo_rectangle)
+                .into(mPhotoImageView);
+        mToolbarTitle.setText(mItem.getTitle());
+        mRubricTextView.setText(mItem.getRubric());
+        mViewCounterTextView.setText(mItem.getViews());
+        mBodyTextView.loadData(mItem.getBody().trim(), "text/html; charset=utf-8", "UTF-8");
+        String htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"fragment_detail_body_style.css\" />" + mItem.getBody().trim();
+        mBodyTextView.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null);
+        mCollapsingToolbarLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                int tvHeight = mToolbarTitle.getHeight();
+                int tbHeight = mToolbar.getHeight();
+                if (tvHeight > tbHeight) {
+                    CollapsingToolbarLayout.LayoutParams params = (CollapsingToolbarLayout.LayoutParams) mToolbar.getLayoutParams();
+                    params.bottomMargin = tvHeight - tbHeight;
+                    mToolbar.setLayoutParams(params);
+                }
+            }
+        });
     }
 
     @Override
@@ -108,13 +150,13 @@ public class NewsDetailFragment extends Fragment {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_TEXT, createShareText());
-                shareIntent.putExtra(Intent.EXTRA_HTML_TEXT, mIntent.getStringExtra(EXTRA_BODY));
+                shareIntent.putExtra(Intent.EXTRA_HTML_TEXT, mItem.getBody());
                 shareIntent.setType("text/plain");
                 Intent chooser = Intent.createChooser(shareIntent, getString(R.string.send_via));
                 startActivity(chooser);
                 return true;
             case R.id.menu_detail_show_in_browser:
-                Intent showInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(NewsFetcher.BASE_URI + "news/" + mIntent.getStringExtra(EXTRA_ID)));
+                Intent showInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(NewsFetcher.BASE_URI + "news/" + mItem.getId()));
                 startActivity(showInBrowser);
             default:
                 return super.onOptionsItemSelected(item);
@@ -123,40 +165,16 @@ public class NewsDetailFragment extends Fragment {
 
     private String createShareText() {
         StringBuilder newsText = new StringBuilder();
-        newsText.append(mIntent.getStringExtra(EXTRA_TITLE) + "\n");
-        newsText.append(NewsFetcher.BASE_URI + "news/" + mIntent.getStringExtra(EXTRA_ID));
-
+        newsText.append(mItem.getTitle()).append("\n");
+        newsText.append(NewsFetcher.BASE_URI + "news/").append(mItem.getId());
         return newsText.toString();
     }
 
-    private void updateUI() {
-        Picasso.with(getActivity())
-                .load(mIntent.getStringExtra(EXTRA_PHOTO_FILE_PATH))
-                .error(R.drawable.logo_rectangle)
-                .into(mPhotoImageView);
-        mToolbarTitle.setText(mIntent.getStringExtra(EXTRA_TITLE));
-        mRubricTextView.setText(mIntent.getStringExtra(EXTRA_RUBRIC));
-        mViewCounterTextView.setText(mIntent.getStringExtra(EXTRA_VIEWS));
-        mBodyTextView.loadData(mIntent.getStringExtra(EXTRA_BODY).trim(), "text/html; charset=utf-8", "UTF-8");
-        String htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"fragment_detail_body_style.css\" />" + mIntent.getStringExtra(EXTRA_BODY).trim();
-        mBodyTextView.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null);
-        mCollapsingToolbarLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                int tvHeight = mToolbarTitle.getHeight();
-                int tbHeight = mToolbar.getHeight();
-                if (tvHeight > tbHeight) {
-                    CollapsingToolbarLayout.LayoutParams params = (CollapsingToolbarLayout.LayoutParams) mToolbar.getLayoutParams();
-                    params.bottomMargin = tvHeight - tbHeight;
-                    mToolbar.setLayoutParams(params);
-                }
-            }
-        });
-    }
+
 
     private void setToolBar() {
-        mActivity = (NewsDetailActivity) getActivity();
-        mActivity.setSupportActionBar(mToolbar);
+        AppCompatActivity activity = (NewsDetailActivity) getActivity();
+        activity.setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
     }
 
@@ -243,15 +261,32 @@ public class NewsDetailFragment extends Fragment {
                 .build();
     }
 
-    public static Intent getIntent(Context context, NewsItem item) {
+    public static Intent getIntent(Context context, String id) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
-        intent.putExtra(EXTRA_ID, item.getId());
-        intent.putExtra(EXTRA_TITLE, item.getTitle());
-        intent.putExtra(EXTRA_BODY, item.getBody());
-        intent.putExtra(EXTRA_CREATED, item.getCreated());
-        intent.putExtra(EXTRA_RUBRIC, item.getRubric());
-        intent.putExtra(EXTRA_VIEWS, item.getViews());
-        intent.putExtra(EXTRA_PHOTO_FILE_PATH, item.getPhotoFilePath());
+        intent.putExtra(EXTRA_ID, id);
+//        intent.putExtra(EXTRA_ID, item.getId());
+//        intent.putExtra(EXTRA_TITLE, item.getTitle());
+//        intent.putExtra(EXTRA_BODY, item.getBody());
+//        intent.putExtra(EXTRA_CREATED, item.getCreated());
+//        intent.putExtra(EXTRA_RUBRIC, item.getRubric());
+//        intent.putExtra(EXTRA_VIEWS, item.getViews());
+//        intent.putExtra(EXTRA_PHOTO_FILE_PATH, item.getPhotoFilePath());
         return intent;
+    }
+
+    private class NewsLoader extends AsyncTask<String, Void, NewsItem> {
+
+        @Override
+        protected NewsItem doInBackground(String... params) {
+            return new NewsFetcher().fetchNewsById(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(NewsItem item) {
+            mItem = item;
+            super.onPostExecute(item);
+//            Log.d(TAG, "Размер путей: " + item.getPhotoFilePaths().size());
+//            mItem = item;
+        }
     }
 }

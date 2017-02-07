@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,6 +38,7 @@ import java.util.List;
 
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
+import ru.vest_news.vest_news.network.NewsFetcher;
 import ru.vest_news.vest_news.network.NewsPreLoader;
 import ru.vest_news.vest_news.network.NewsService;
 import ru.vest_news.vest_news.utils.NewsLab;
@@ -49,6 +52,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private Toolbar mToolbar;
     private Drawer mDrawer;
     private NewsLab mNewsLab = NewsLab.getInstance();
+    private boolean isFirstStart = true;
 
 
     public static NewsListFragment newInstance() {
@@ -60,7 +64,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        updateItems();
     }
 
     @Nullable
@@ -95,7 +98,13 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     @Override
     public void onResume() {
         super.onResume();
-        updateItems();
+        if (isFirstStart) {
+            Log.d(TAG, "Первый запуск");
+            isFirstStart = false;
+        } else {
+            Log.d(TAG, "Непервый запуск");
+            updateItems();
+        }
         setToolBar();
     }
 
@@ -127,6 +136,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
     private void updateItems() {
         new NewsPreLoader().execute();
+        setupAdapter();
     }
 
     private void setToolBar() {
@@ -157,12 +167,14 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         mDrawer = new DrawerBuilder()
                 .withActivity(getActivity())
                 .withToolbar(mToolbar)
+                .withSelectedItem(-1)
                 .withHeader(R.layout.drawer_header)
+                .withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withTranslucentStatusBar(true)
                 .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
-                        news.withSetSelected(true),
+                        news,
                         weather,
                         contacts,
                         new DividerDrawerItem(),
@@ -219,7 +231,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private void setupAdapter() {
         if (isAdded()) {
             mAdapter = new NewsAdapter(mNewsLab.getItems());
-            Log.d(TAG, "Id первой новости: " + mNewsLab.getItems().get(0).getId());
             mNewsRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
@@ -229,7 +240,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     public void onRefresh() {
         mSwipeRefreshLayout.setRefreshing(true);
         updateItems();
-        setupAdapter();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -252,7 +262,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item);
+                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item.getId());
                     startActivity(detailIntent);
                 }
             });
@@ -276,8 +286,10 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         public NewsHolder(View itemView) {
             super(itemView);
             mTitleTextView = (TextView) itemView.findViewById(R.id.news_list_item_title);
-            mTitleTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Calibri.ttf");
-            mTitleTextView.setTypeface(mTitleTypeFace);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                mTitleTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Calibri.ttf");
+                mTitleTextView.setTypeface(mTitleTypeFace);
+            }
             mPhotoImageView = (ImageView) itemView.findViewById(R.id.news_list_item_photo);
             mDateTextView = (TextView) itemView.findViewById(R.id.news_list_item_date_text_view);
             mRubricTextView = (TextView) itemView.findViewById(R.id.news_list_rubric_text_view);
