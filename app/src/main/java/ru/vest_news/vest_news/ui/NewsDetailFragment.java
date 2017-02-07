@@ -72,12 +72,31 @@ public class NewsDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+        loadNewsInfo();
     }
 
     private void loadNewsInfo() {
         Intent intent = getActivity().getIntent();
-        String id = intent.getStringExtra(EXTRA_ID);
+        final String id = intent.getStringExtra(EXTRA_ID);
         //Вот тут реализовать загрузку отдельной новости в паралельном потоке используя mHandler.
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                mItem = new NewsFetcher().fetchNewsById(id);
+//                Log.d(TAG, "Заголовок загружаемой новости:" + mItem.getTitle());
+//                for (int i = 0; i < mItem.getPhotoFilePaths().size(); i++) {
+//                    Log.d(TAG, "Пути к файлам загружаемой новости:" + mItem.getPhotoFilePaths().get(i));
+//                }
+//                if (mItem == null) {
+//                    mHandler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Toast.makeText(getActivity(), "Не удалось загрузить данные новости.", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                }
+//            }
+//        }.start();
         try {
             mItem = new NewsLoader().execute(id).get(); //Тут инициализируется переменная mItem.
         } catch (InterruptedException | ExecutionException e) {
@@ -89,9 +108,7 @@ public class NewsDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_detail, container, false);
-        loadNewsInfo();
         initUI(v);
-        updateUI();
         return v;
     }
 
@@ -106,10 +123,12 @@ public class NewsDetailFragment extends Fragment {
     }
 
     private void updateUI() {
+
         Picasso.with(getActivity())
                 .load(mItem.getPhotoFilePaths().get(0))
                 .error(R.drawable.logo_rectangle)
                 .into(mPhotoImageView);
+
         mToolbarTitle.setText(mItem.getTitle());
         mRubricTextView.setText(mItem.getRubric());
         mViewCounterTextView.setText(mItem.getViews());
@@ -135,6 +154,7 @@ public class NewsDetailFragment extends Fragment {
         super.onResume();
         setToolBar();
         setUpNavigationDrawer();
+        updateUI();
     }
 
     @Override
@@ -169,7 +189,6 @@ public class NewsDetailFragment extends Fragment {
         newsText.append(NewsFetcher.BASE_URI + "news/").append(mItem.getId());
         return newsText.toString();
     }
-
 
 
     private void setToolBar() {
@@ -238,19 +257,19 @@ public class NewsDetailFragment extends Fragment {
                                 mDrawer.closeDrawer();
                                 return true;
                             case 2:
-                                Toast.makeText(getActivity(), "Будет открыта активность Погода!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 3:
-                                Toast.makeText(getActivity(), "Будет открыта активность Настройки", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 4:
-                                Toast.makeText(getActivity(), "Будет открыта активность Контакты", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 5:
-                                Toast.makeText(getActivity(), "Будет открыта активность О приложении", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             default:
