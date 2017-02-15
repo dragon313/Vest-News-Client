@@ -17,6 +17,7 @@ import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.network.NewsPreLoader;
 import ru.vest_news.vest_news.application.App;
 import ru.vest_news.vest_news.network.retorofit.RetrofitNewsModel;
+import ru.vest_news.vest_news.utils.NewsLab;
 
 public class SplashActivity extends AppCompatActivity {
     public static final String TAG = "SplashActivity";
@@ -31,28 +32,28 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        new NewsPreLoader().execute();
+        //Тестовый метод
+        runRetrofitApi();
         new Loading().execute();
     }
 
-//    private void runRetrofitApi() {
-//        App.getApi().getData(5).enqueue(new Callback<RetrofitNewsModel>() {
-//            @Override
-//            public void onResponse(Call<RetrofitNewsModel> call, Response<RetrofitNewsModel> response) {
-//                Log.i(TAG, "Данные успешно получены.");
-//                if (response.body() != null) {
-//                    Log.i(TAG, "response.body() != null -> true");
-//                    Log.i(TAG, "Заголовой последней новости: " + response.body().getRows().get(0).getTitle());
-//                } else {
-//                    Log.i(TAG, "response.body() != null -> false");
-//                }
-//            }
-//            @Override
-//            public void onFailure(Call<RetrofitNewsModel> call, Throwable t) {
-//                Log.i(TAG, "Произошла ошибка при загрузке.");
-//            }
-//        });
-//    }
+    private void runRetrofitApi() {
+        App.getApi().getNewsList(5).enqueue(new Callback<RetrofitNewsModel>() {
+            @Override
+            public void onResponse(Call<RetrofitNewsModel> call, Response<RetrofitNewsModel> response) {
+                Log.i(TAG, "Данные успешно получены.");
+                if (response.body() != null) {
+                    NewsLab.getInstance().setItems(response.body().getRows());
+                } else {
+                    Log.i(TAG, "response.body() != null -> false");
+                }
+            }
+            @Override
+            public void onFailure(Call<RetrofitNewsModel> call, Throwable t) {
+                Log.i(TAG, "Произошла ошибка при загрузке.");
+            }
+        });
+    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -70,14 +71,11 @@ public class SplashActivity extends AppCompatActivity {
     private class Loading extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-
             try {
-
                 Thread.sleep(2000);
             }catch (InterruptedException ie){
                 ie.printStackTrace();
             }
-
             return null;
         }
 

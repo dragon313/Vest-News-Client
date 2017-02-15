@@ -19,7 +19,7 @@ public class NewsPreLoader extends AsyncTask<Void, Void, List<NewsItem>> {
 
     @Override
     protected void onPostExecute(List<NewsItem> newsItems) {
-        mNewsLab.setItems(newsItems);
+//        mNewsLab.setItems(newsItems);
         Log.d(TAG, "Новостей: " + mNewsLab.getItems().size());
     }
 }

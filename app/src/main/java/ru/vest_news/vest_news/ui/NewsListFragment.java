@@ -33,15 +33,13 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.application.App;
-import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.network.NewsPreLoader;
 import ru.vest_news.vest_news.network.NewsService;
 import ru.vest_news.vest_news.network.retorofit.RetrofitNewsModel;
 import ru.vest_news.vest_news.network.retorofit.Row;
@@ -55,9 +53,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private NewsAdapter mAdapter;
     private Toolbar mToolbar;
     private Drawer mDrawer;
-    private NewsLab mNewsLab = NewsLab.getInstance();
-    private RetrofitNewsModel mNewsModel;
-    private List<Row> mNewsList;
+    private volatile ArrayList<Row> mNewsList = new ArrayList<>();
     private boolean isFirstStart = true;
 
 
@@ -70,7 +66,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        runVestNewsApi();
     }
 
     @Nullable
@@ -98,7 +93,8 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-        setupAdapter();
+        runVestNewsApi();
+        updateItems();
         return v;
     }
 
@@ -142,19 +138,17 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     }
 
     private void updateItems() {
-        new NewsPreLoader().execute();
         setupAdapter();
     }
 
-    private void runVestNewsApi() {
-        App.getApi().getData(5).enqueue(new Callback<RetrofitNewsModel>() {
+    private synchronized void runVestNewsApi() {
+        App.getApi().getNewsList(5).enqueue(new Callback<RetrofitNewsModel>() {
             @Override
             public void onResponse(Call<RetrofitNewsModel> call, Response<RetrofitNewsModel> response) {
                 Log.i(TAG, "Данные успешно получены.");
                 if (response.body() != null) {
                     Log.i(TAG, "response.body() != null -> true");
-                    mNewsModel = response.body();
-                    mNewsList = response.body().getRows();
+                    mNewsList = (ArrayList<Row>) response.body().getRows();
                     Log.i(TAG, "Заголовой последней новости: " + response.body().getRows().get(0).getTitle());
                 } else {
                     Log.i(TAG, "response.body() != null -> false");
@@ -257,11 +251,11 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                 .build();
     }
 
-    private void setupAdapter() {
+    private synchronized void setupAdapter() {
         if (isAdded()) {
-            mAdapter = new NewsAdapter(mNewsLab.getItems());
+            mAdapter = new NewsAdapter(NewsLab.getInstance().getItems());
             mNewsRecyclerView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -273,10 +267,12 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     }
 
     private class NewsAdapter extends RecyclerView.Adapter<NewsHolder> {
-        private List<NewsItem> mNewsItems;
+        private static final String TAG = "NewsAdapter";
+        private ArrayList<Row> mNewsList = new ArrayList<>();
 
-        public NewsAdapter(List<NewsItem> newsItems) {
-            mNewsItems = newsItems;
+        public NewsAdapter(ArrayList<Row> newsItems) {
+            mNewsList = newsItems;
+            Log.d(TAG, "mNewsList.size() = " + mNewsList.size());
         }
 
         @Override
@@ -287,11 +283,11 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         @Override
         public void onBindViewHolder(NewsHolder holder, int position) {
-            final NewsItem item = mNewsItems.get(position);
+            final Row item = mNewsList.get(position);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item.getId());
+                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item.getNid());
                     startActivity(detailIntent);
                 }
             });
@@ -300,7 +296,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         @Override
         public int getItemCount() {
-            return mNewsItems.size();
+            return mNewsList.size();
         }
     }
 
@@ -326,13 +322,13 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         }
 
-        public void bindNewsItem(NewsItem item) {
+        public void bindNewsItem(Row item) {
             mTitleTextView.setText(item.getTitle());
             mDateTextView.setText(item.getDate());
             mRubricTextView.setText(item.getRubric());
             mViewCounterTextView.setText(item.getViews());
             Picasso.with(getActivity())
-                    .load(Uri.parse(item.getPhotoFilePath()))
+                    .load(Uri.parse(item.getFilepath()))
                     .placeholder(R.drawable.logo_rectangle)
                     .error(R.drawable.logo_rectangle)
                     .into(mPhotoImageView);

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.vest_news.vest_news.model.NewsItem;
+import ru.vest_news.vest_news.network.retorofit.Row;
 
 public class NewsLab {
     private static NewsLab ourInstance = new NewsLab();
-    private List<NewsItem> mItems;
+    private List<Row> mItems;
 
     public static NewsLab getInstance() {
         return ourInstance;
@@ -17,15 +18,15 @@ public class NewsLab {
         mItems = new ArrayList<>();
     }
 
-    public List<NewsItem> getItems() {
-        return mItems;
+    public ArrayList<Row> getItems() {
+        return (ArrayList<Row>) mItems;
     }
 
-    public void setItems(List<NewsItem> items) {
+    public void setItems(List<Row> items) {
         mItems = items;
     }
 
-    public NewsItem getItem(int position) {
+    public Row getItem(int position) {
         return mItems.get(position);
     }
 }

@@ -8,7 +8,7 @@ public class RetrofitNewsModel {
 
     @SerializedName("rows")
     @Expose
-    private List<Row> rows = null;
+    private List<Row> rows;
 
     public List<Row> getRows() {
         return rows;

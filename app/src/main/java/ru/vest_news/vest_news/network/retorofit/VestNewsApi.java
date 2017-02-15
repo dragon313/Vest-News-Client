@@ -6,5 +6,5 @@ import retrofit2.http.Query;
 
 public interface VestNewsApi {
     @GET("/api/news")
-    Call<RetrofitNewsModel> getData(@Query("limit") Integer count);
+    Call<RetrofitNewsModel> getNewsList(@Query("limit") Integer count);
 }

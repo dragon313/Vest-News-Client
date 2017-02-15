@@ -3,7 +3,11 @@ package ru.vest_news.vest_news.network.retorofit;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Row {
+    private static final String BASE_URI = "http://www.vest-news.ru/";
 
     @SerializedName("nid")
     @Expose
@@ -82,7 +86,7 @@ public class Row {
     }
 
     public String getFilepath() {
-        return filepath;
+        return BASE_URI+filepath;
     }
 
     public void setFilepath(String filepath) {
@@ -103,6 +107,12 @@ public class Row {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getDate() {
+        Date date = new Date(Long.parseLong(created + "000"));
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        return format.format(date);
     }
 
 }
