@@ -41,13 +41,15 @@ import java.util.concurrent.ExecutionException;
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.model.NewsItem;
 import ru.vest_news.vest_news.network.NewsFetcher;
+import ru.vest_news.vest_news.network.retorofit.RetrofitNewsItem;
+import ru.vest_news.vest_news.utils.NewsLab;
 
 public class NewsDetailFragment extends Fragment {
     private static final String TAG = "NewsDetailFragment";
 
     public static final String EXTRA_ID = "EXTRA_ID";
 
-    private NewsItem mItem;
+    private RetrofitNewsItem mItem;
     private Toolbar mToolbar;
     private Drawer mDrawer;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -56,52 +58,25 @@ public class NewsDetailFragment extends Fragment {
     private ImageView mPhotoImageView;
     private TextView mRubricTextView;
     private TextView mViewCounterTextView;
-    private Handler mHandler;
 
 
     public static NewsDetailFragment newInstance() {
         return new NewsDetailFragment();
     }
 
-    public NewsDetailFragment() {
-        mHandler = new Handler(); //Будет применён для загрузки отдельной новости.
-    }
+    public NewsDetailFragment() {}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        loadNewsInfo();
     }
 
     private void loadNewsInfo() {
         Intent intent = getActivity().getIntent();
         final String id = intent.getStringExtra(EXTRA_ID);
-        //Вот тут реализовать загрузку отдельной новости в паралельном потоке используя mHandler.
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                mItem = new NewsFetcher().fetchNewsById(id);
-//                Log.d(TAG, "Заголовок загружаемой новости:" + mItem.getTitle());
-//                for (int i = 0; i < mItem.getPhotoFilePaths().size(); i++) {
-//                    Log.d(TAG, "Пути к файлам загружаемой новости:" + mItem.getPhotoFilePaths().get(i));
-//                }
-//                if (mItem == null) {
-//                    mHandler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Toast.makeText(getActivity(), "Не удалось загрузить данные новости.", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                }
-//            }
-//        }.start();
-        try {
-            mItem = new NewsLoader().execute(id).get(); //Тут инициализируется переменная mItem.
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        mItem = NewsLab.getInstance().getItem(id);
     }
 
     @Nullable
@@ -109,6 +84,7 @@ public class NewsDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_detail, container, false);
         initUI(v);
+        loadNewsInfo();
         return v;
     }
 
@@ -125,7 +101,7 @@ public class NewsDetailFragment extends Fragment {
     private void updateUI() {
 
         Picasso.with(getActivity())
-                .load(mItem.getPhotoFilePaths().get(0))
+                .load(mItem.getFilepath())
                 .error(R.drawable.logo_rectangle)
                 .into(mPhotoImageView);
 
@@ -176,7 +152,7 @@ public class NewsDetailFragment extends Fragment {
                 startActivity(chooser);
                 return true;
             case R.id.menu_detail_show_in_browser:
-                Intent showInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(NewsFetcher.BASE_URI + "news/" + mItem.getId()));
+                Intent showInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(NewsFetcher.BASE_URI + "news/" + mItem.getNid()));
                 startActivity(showInBrowser);
             default:
                 return super.onOptionsItemSelected(item);
@@ -186,7 +162,7 @@ public class NewsDetailFragment extends Fragment {
     private String createShareText() {
         StringBuilder newsText = new StringBuilder();
         newsText.append(mItem.getTitle()).append("\n");
-        newsText.append(NewsFetcher.BASE_URI + "news/").append(mItem.getId());
+        newsText.append(NewsFetcher.BASE_URI + "news/").append(mItem.getNid());
         return newsText.toString();
     }
 
@@ -283,29 +259,6 @@ public class NewsDetailFragment extends Fragment {
     public static Intent getIntent(Context context, String id) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
         intent.putExtra(EXTRA_ID, id);
-//        intent.putExtra(EXTRA_ID, item.getId());
-//        intent.putExtra(EXTRA_TITLE, item.getTitle());
-//        intent.putExtra(EXTRA_BODY, item.getBody());
-//        intent.putExtra(EXTRA_CREATED, item.getCreated());
-//        intent.putExtra(EXTRA_RUBRIC, item.getRubric());
-//        intent.putExtra(EXTRA_VIEWS, item.getViews());
-//        intent.putExtra(EXTRA_PHOTO_FILE_PATH, item.getPhotoFilePath());
         return intent;
-    }
-
-    private class NewsLoader extends AsyncTask<String, Void, NewsItem> {
-
-        @Override
-        protected NewsItem doInBackground(String... params) {
-            return new NewsFetcher().fetchNewsById(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(NewsItem item) {
-            mItem = item;
-            super.onPostExecute(item);
-//            Log.d(TAG, "Размер путей: " + item.getPhotoFilePaths().size());
-//            mItem = item;
-        }
     }
 }
