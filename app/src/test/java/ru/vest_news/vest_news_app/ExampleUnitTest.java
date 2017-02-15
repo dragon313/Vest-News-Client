@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news;
+package ru.vest_news.vest_news_app;
 
 import org.junit.Test;
 

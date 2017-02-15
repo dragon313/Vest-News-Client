@@ -1,19 +1,15 @@
-package ru.vest_news.vest_news.ui;
+package ru.vest_news.vest_news_app.ui;
 
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,13 +32,10 @@ import com.squareup.picasso.Picasso;
 
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
-import java.util.concurrent.ExecutionException;
-
-import ru.vest_news.vest_news.R;
-import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.network.NewsFetcher;
-import ru.vest_news.vest_news.network.retorofit.RetrofitNewsItem;
-import ru.vest_news.vest_news.utils.NewsLab;
+import ru.vest_news.vest_news_app.R;
+import ru.vest_news.vest_news_app.network.NewsFetcher;
+import ru.vest_news.vest_news_app.network.retorofit.RetrofitNewsItem;
+import ru.vest_news.vest_news_app.utils.NewsLab;
 
 public class NewsDetailFragment extends Fragment {
     private static final String TAG = "NewsDetailFragment";

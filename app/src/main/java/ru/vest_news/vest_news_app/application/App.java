@@ -1,10 +1,10 @@
-package ru.vest_news.vest_news.application;
+package ru.vest_news.vest_news_app.application;
 
 import android.app.Application;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.vest_news.vest_news.network.retorofit.VestNewsApi;
+import ru.vest_news.vest_news_app.network.retorofit.VestNewsApi;
 
 public class App extends Application {
     private static final String BASE_URI = "http://www.vest-news.ru";

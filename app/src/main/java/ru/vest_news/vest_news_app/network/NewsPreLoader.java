@@ -1,12 +1,12 @@
-package ru.vest_news.vest_news.network;
+package ru.vest_news.vest_news_app.network;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.List;
 
-import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.utils.NewsLab;
+import ru.vest_news.vest_news_app.model.NewsItem;
+import ru.vest_news.vest_news_app.utils.NewsLab;
 
 public class NewsPreLoader extends AsyncTask<Void, Void, List<NewsItem>> {
     private static final String TAG = "NewsParser";

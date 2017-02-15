@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.utils;
+package ru.vest_news.vest_news_app.utils;
 
 import android.content.Context;
 import android.preference.PreferenceManager;

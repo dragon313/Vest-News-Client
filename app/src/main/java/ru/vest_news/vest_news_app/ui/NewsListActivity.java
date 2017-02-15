@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.ui;
+package ru.vest_news.vest_news_app.ui;
 
 import android.content.Context;
 import android.content.Intent;

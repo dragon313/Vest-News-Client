@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.network;
+package ru.vest_news.vest_news_app.network;
 
 import android.net.Uri;
 import android.util.Log;
@@ -18,10 +18,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.vest_news.vest_news.application.App;
-import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.network.retorofit.RetrofitNewsList;
-import ru.vest_news.vest_news.utils.NewsLab;
+import ru.vest_news.vest_news_app.application.App;
+import ru.vest_news.vest_news_app.model.NewsItem;
+import ru.vest_news.vest_news_app.network.retorofit.RetrofitNewsList;
+import ru.vest_news.vest_news_app.utils.NewsLab;
 
 public class NewsFetcher {
     private static final String TAG = "NewsFetcher";

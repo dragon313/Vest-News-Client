@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.ui;
+package ru.vest_news.vest_news_app.ui;
 
 
 import android.app.Activity;
@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -35,16 +34,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import ru.vest_news.vest_news.R;
-import ru.vest_news.vest_news.application.App;
-import ru.vest_news.vest_news.network.NewsFetcher;
-import ru.vest_news.vest_news.network.NewsService;
-import ru.vest_news.vest_news.network.retorofit.RetrofitNewsItem;
-import ru.vest_news.vest_news.network.retorofit.RetrofitNewsList;
-import ru.vest_news.vest_news.utils.NewsLab;
+import ru.vest_news.vest_news_app.R;
+import ru.vest_news.vest_news_app.network.NewsFetcher;
+import ru.vest_news.vest_news_app.network.NewsService;
+import ru.vest_news.vest_news_app.network.retorofit.RetrofitNewsItem;
+import ru.vest_news.vest_news_app.utils.NewsLab;
 
 public class NewsListFragment extends VisibleFragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NewsListFragment";

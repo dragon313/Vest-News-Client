@@ -1,9 +1,9 @@
-package ru.vest_news.vest_news.utils;
+package ru.vest_news.vest_news_app.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.vest_news.vest_news.network.retorofit.RetrofitNewsItem;
+import ru.vest_news.vest_news_app.network.retorofit.RetrofitNewsItem;
 
 public class NewsLab {
     private static NewsLab ourInstance = new NewsLab();

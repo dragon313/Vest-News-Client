@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ru.vest_news.vest_news.ui.SplashActivity">
+    tools:context="ru.vest_news.vest_news_app.ui.SplashActivity">
 
     <ImageView
         android:layout_width="180dp"

@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.network.retorofit;
+package ru.vest_news.vest_news_app.network.retorofit;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

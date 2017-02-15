@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.network;
+package ru.vest_news.vest_news_app.network;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -15,10 +15,10 @@ import android.util.Log;
 
 import java.util.List;
 
-import ru.vest_news.vest_news.R;
-import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.ui.NewsListActivity;
-import ru.vest_news.vest_news.utils.QueryPreferences;
+import ru.vest_news.vest_news_app.R;
+import ru.vest_news.vest_news_app.model.NewsItem;
+import ru.vest_news.vest_news_app.ui.NewsListActivity;
+import ru.vest_news.vest_news_app.utils.QueryPreferences;
 
 public class NewsService extends IntentService {
     private static final String TAG = "NewsService";

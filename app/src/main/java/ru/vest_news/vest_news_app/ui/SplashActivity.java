@@ -1,23 +1,16 @@
-package ru.vest_news.vest_news.ui;
+package ru.vest_news.vest_news_app.ui;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import ru.vest_news.vest_news.R;
-import ru.vest_news.vest_news.application.App;
-import ru.vest_news.vest_news.network.NewsFetcher;
-import ru.vest_news.vest_news.network.retorofit.RetrofitNewsList;
-import ru.vest_news.vest_news.utils.NewsLab;
+import ru.vest_news.vest_news_app.R;
+import ru.vest_news.vest_news_app.network.NewsFetcher;
 
 public class SplashActivity extends AppCompatActivity {
     public static final String TAG = "SplashActivity";
