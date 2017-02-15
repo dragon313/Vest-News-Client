@@ -1,11 +1,11 @@
-package ru.vest_news.vest_news.network;
+package ru.vest_news.vest_news_app.network;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import ru.vest_news.vest_news.utils.QueryPreferences;
+import ru.vest_news.vest_news_app.utils.QueryPreferences;
 
 public class StartupReceiver extends BroadcastReceiver {
     private static final String TAG = "StartupReceiver";

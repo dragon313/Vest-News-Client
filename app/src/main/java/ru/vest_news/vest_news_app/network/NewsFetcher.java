@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.network;
+package ru.vest_news.vest_news_app.network;
 
 import android.net.Uri;
 import android.util.Log;
@@ -15,7 +15,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.vest_news.vest_news.model.NewsItem;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import ru.vest_news.vest_news_app.application.App;
+import ru.vest_news.vest_news_app.model.NewsItem;
+import ru.vest_news.vest_news_app.network.retorofit.RetrofitNewsList;
+import ru.vest_news.vest_news_app.utils.NewsLab;
 
 public class NewsFetcher {
     private static final String TAG = "NewsFetcher";
@@ -139,5 +145,23 @@ public class NewsFetcher {
             e.printStackTrace();
         }
         return lastIdString;
+    }
+
+    public static void updateNewsList() {
+            App.getNewsListApi().getNewsList(50).enqueue(new Callback<RetrofitNewsList>() {
+                @Override
+                public void onResponse(Call<RetrofitNewsList> call, Response<RetrofitNewsList> response) {
+                    Log.i(TAG, "Данные успешно получены.");
+                    if (response.body() != null) {
+                        NewsLab.getInstance().setItems(response.body().getRows());
+                    } else {
+                        Log.i(TAG, "response.body() != null -> false");
+                    }
+                }
+                @Override
+                public void onFailure(Call<RetrofitNewsList> call, Throwable t) {
+                    Log.i(TAG, "Произошла ошибка при загрузке.");
+                }
+            });
     }
 }

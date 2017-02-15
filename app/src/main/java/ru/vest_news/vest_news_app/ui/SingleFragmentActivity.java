@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.ui;
+package ru.vest_news.vest_news_app.ui;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import ru.vest_news.vest_news.R;
+import ru.vest_news.vest_news_app.R;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
     protected abstract Fragment createFragment();

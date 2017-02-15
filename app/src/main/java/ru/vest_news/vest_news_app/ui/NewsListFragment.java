@@ -1,16 +1,14 @@
-package ru.vest_news.vest_news.ui;
+package ru.vest_news.vest_news_app.ui;
 
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -34,14 +32,13 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import ru.vest_news.vest_news.R;
-import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.network.NewsFetcher;
-import ru.vest_news.vest_news.network.NewsPreLoader;
-import ru.vest_news.vest_news.network.NewsService;
-import ru.vest_news.vest_news.utils.NewsLab;
+import ru.vest_news.vest_news_app.R;
+import ru.vest_news.vest_news_app.network.NewsFetcher;
+import ru.vest_news.vest_news_app.network.NewsService;
+import ru.vest_news.vest_news_app.network.retorofit.RetrofitNewsItem;
+import ru.vest_news.vest_news_app.utils.NewsLab;
 
 public class NewsListFragment extends VisibleFragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NewsListFragment";
@@ -51,7 +48,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private NewsAdapter mAdapter;
     private Toolbar mToolbar;
     private Drawer mDrawer;
-    private NewsLab mNewsLab = NewsLab.getInstance();
     private boolean isFirstStart = true;
 
 
@@ -72,13 +68,9 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         View v = inflater.inflate(R.layout.fragment_news_list, container, false);
         mToolbar = (Toolbar) v.findViewById(R.id.fragment_news_list_toolbar);
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.fragment_news_list_swipe_container);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-                R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         mNewsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_news_list_recycler_view);
-        mNewsRecyclerView.setHasFixedSize(true);
-        mNewsRecyclerView.setItemAnimator(itemAnimator);
         mNewsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mNewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -91,6 +83,9 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+        if (NewsLab.getInstance().getItems() == null) {
+            updateItems();
+        }
         setupAdapter();
         return v;
     }
@@ -135,7 +130,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     }
 
     private void updateItems() {
-        new NewsPreLoader().execute();
+        NewsFetcher.updateNewsList();
         setupAdapter();
     }
 
@@ -202,22 +197,23 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch ((int) drawerItem.getIdentifier()) {
                             case 1:
+                                updateItems();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 2:
-                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 3:
-                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 4:
-                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 5:
-                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             default:
@@ -230,7 +226,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
     private void setupAdapter() {
         if (isAdded()) {
-            mAdapter = new NewsAdapter(mNewsLab.getItems());
+            mAdapter = new NewsAdapter(NewsLab.getInstance().getItems());
             mNewsRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
@@ -244,10 +240,12 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     }
 
     private class NewsAdapter extends RecyclerView.Adapter<NewsHolder> {
-        private List<NewsItem> mNewsItems;
+        private static final String TAG = "NewsAdapter";
+        private ArrayList<RetrofitNewsItem> mNewsList = new ArrayList<>();
 
-        public NewsAdapter(List<NewsItem> newsItems) {
-            mNewsItems = newsItems;
+        public NewsAdapter(ArrayList<RetrofitNewsItem> retrofitNewsItems) {
+            mNewsList = retrofitNewsItems;
+            Log.d(TAG, "mNewsList.size() = " + mNewsList.size());
         }
 
         @Override
@@ -258,11 +256,11 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         @Override
         public void onBindViewHolder(NewsHolder holder, int position) {
-            final NewsItem item = mNewsItems.get(position);
+            final RetrofitNewsItem item = mNewsList.get(position);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item.getId());
+                    Intent detailIntent = NewsDetailFragment.getIntent(getActivity(), item.getNid());
                     startActivity(detailIntent);
                 }
             });
@@ -271,7 +269,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         @Override
         public int getItemCount() {
-            return mNewsItems.size();
+            return mNewsList.size();
         }
     }
 
@@ -297,13 +295,13 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         }
 
-        public void bindNewsItem(NewsItem item) {
+        public void bindNewsItem(RetrofitNewsItem item) {
             mTitleTextView.setText(item.getTitle());
             mDateTextView.setText(item.getDate());
             mRubricTextView.setText(item.getRubric());
             mViewCounterTextView.setText(item.getViews());
             Picasso.with(getActivity())
-                    .load(Uri.parse(item.getPhotoFilePath()))
+                    .load(Uri.parse(item.getFilepath()))
                     .placeholder(R.drawable.logo_rectangle)
                     .error(R.drawable.logo_rectangle)
                     .into(mPhotoImageView);

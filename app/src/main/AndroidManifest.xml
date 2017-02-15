@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="ru.vest_news.vest_news">
+          package="ru.vest_news.vest_news_app">
 
     <permission
-        android:name="ru.vest_news.vest_news.PRIVATE"
+        android:name="ru.vest_news.vest_news_app.PRIVATE"
         android:protectionLevel="signature"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -12,6 +12,7 @@
     <uses-permission android:name="ru.vest_news.vest_news.PRIVATE"/>
 
     <application
+        android:name=".application.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,7 +21,6 @@
         <activity
             android:name=".ui.NewsListActivity"
             android:launchMode="singleInstance">
-
         </activity>
         <activity
             android:name=".ui.NewsDetailActivity"
@@ -52,6 +52,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.AboutActivity">
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.ui;
+package ru.vest_news.vest_news_app.ui;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -8,7 +8,7 @@ import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import ru.vest_news.vest_news.network.NewsService;
+import ru.vest_news.vest_news_app.network.NewsService;
 
 public abstract class VisibleFragment extends Fragment {
     private static final String TAG = "VisibleFragment";

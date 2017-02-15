@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.ui;
+package ru.vest_news.vest_news_app.ui;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,10 +9,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import ru.vest_news.vest_news.R;
-import ru.vest_news.vest_news.network.NewsPreLoader;
+import ru.vest_news.vest_news_app.R;
+import ru.vest_news.vest_news_app.network.NewsFetcher;
 
 public class SplashActivity extends AppCompatActivity {
+    public static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +25,11 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        new NewsPreLoader().execute();
+        NewsFetcher.updateNewsList();
         new Loading().execute();
     }
+
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -44,14 +47,11 @@ public class SplashActivity extends AppCompatActivity {
     private class Loading extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-
             try {
-
                 Thread.sleep(2000);
             }catch (InterruptedException ie){
                 ie.printStackTrace();
             }
-
             return null;
         }
 

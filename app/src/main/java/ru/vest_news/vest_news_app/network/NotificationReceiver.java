@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news.network;
+package ru.vest_news.vest_news_app.network;
 
 import android.app.Activity;
 import android.app.Notification;

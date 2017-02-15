@@ -1,14 +1,11 @@
-package ru.vest_news.vest_news.model;
-
-import android.util.Log;
+package ru.vest_news.vest_news_app.model;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class NewsItem {
-    private static final String TAG = "NewsItem";
+    private static final String TAG = "RetrofitNewsItem";
     private String mTitle;
     private String mId;
     private String mType;

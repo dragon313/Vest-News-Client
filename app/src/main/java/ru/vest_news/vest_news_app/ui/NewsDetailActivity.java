@@ -1,12 +1,10 @@
-package ru.vest_news.vest_news.ui;
+package ru.vest_news.vest_news_app.ui;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
-import ru.vest_news.vest_news.model.NewsItem;
+import ru.vest_news.vest_news_app.model.NewsItem;
 
 public class NewsDetailActivity extends SingleFragmentActivity {
 
