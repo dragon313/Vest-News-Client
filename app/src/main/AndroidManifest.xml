@@ -53,7 +53,16 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.AboutActivity">
+        <activity
+            android:name=".ui.ContactActivity"
+            android:label="@string/title_activity_contact"
+            android:theme="@style/myTheme">
+        </activity>
+        <activity
+            android:parentActivityName=".ui.NewsListActivity"
+            android:name=".ui.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:theme="@style/myTheme">
         </activity>
     </application>
 

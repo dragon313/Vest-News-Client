@@ -209,11 +209,13 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                                 mDrawer.closeDrawer();
                                 return true;
                             case 4:
-                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                startActivity(ContactActivity.getIntent(getContext()));
+//                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 5:
-                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                startActivity(AboutActivity.getIntent(getContext()));
+//                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             default:
