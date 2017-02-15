@@ -4,17 +4,17 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RetrofitNewsModel {
+public class RetrofitNewsList {
 
     @SerializedName("rows")
     @Expose
-    private List<Row> rows;
+    private List<RetrofitNewsItem> rows;
 
-    public List<Row> getRows() {
+    public List<RetrofitNewsItem> getRows() {
         return rows;
     }
 
-    public void setRows(List<Row> rows) {
+    public void setRows(List<RetrofitNewsItem> rows) {
         this.rows = rows;
     }
 

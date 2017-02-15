@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class NewsItem {
-    private static final String TAG = "NewsItem";
+    private static final String TAG = "RetrofitNewsItem";
     private String mTitle;
     private String mId;
     private String mType;

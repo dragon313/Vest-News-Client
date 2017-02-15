@@ -22,7 +22,7 @@ public class App extends Application {
         sVestNewsApi = mRetrofit.create(VestNewsApi.class);
     }
 
-    public static VestNewsApi getApi() {
+    public static VestNewsApi getNewsListApi() {
         return sVestNewsApi;
     }
 }

@@ -40,9 +40,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.application.App;
+import ru.vest_news.vest_news.network.NewsFetcher;
 import ru.vest_news.vest_news.network.NewsService;
-import ru.vest_news.vest_news.network.retorofit.RetrofitNewsModel;
-import ru.vest_news.vest_news.network.retorofit.Row;
+import ru.vest_news.vest_news.network.retorofit.RetrofitNewsItem;
+import ru.vest_news.vest_news.network.retorofit.RetrofitNewsList;
 import ru.vest_news.vest_news.utils.NewsLab;
 
 public class NewsListFragment extends VisibleFragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -53,7 +54,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private NewsAdapter mAdapter;
     private Toolbar mToolbar;
     private Drawer mDrawer;
-    private volatile ArrayList<Row> mNewsList = new ArrayList<>();
     private boolean isFirstStart = true;
 
 
@@ -74,13 +74,9 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         View v = inflater.inflate(R.layout.fragment_news_list, container, false);
         mToolbar = (Toolbar) v.findViewById(R.id.fragment_news_list_toolbar);
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.fragment_news_list_swipe_container);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-                R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         mNewsRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_news_list_recycler_view);
-        mNewsRecyclerView.setHasFixedSize(true);
-        mNewsRecyclerView.setItemAnimator(itemAnimator);
         mNewsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mNewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -93,8 +89,10 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-        runVestNewsApi();
-        updateItems();
+        if (NewsLab.getInstance().getItems() == null) {
+            updateItems();
+        }
+        setupAdapter();
         return v;
     }
 
@@ -138,28 +136,8 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     }
 
     private void updateItems() {
+        NewsFetcher.updateNewsList();
         setupAdapter();
-    }
-
-    private synchronized void runVestNewsApi() {
-        App.getApi().getNewsList(5).enqueue(new Callback<RetrofitNewsModel>() {
-            @Override
-            public void onResponse(Call<RetrofitNewsModel> call, Response<RetrofitNewsModel> response) {
-                Log.i(TAG, "Данные успешно получены.");
-                if (response.body() != null) {
-                    Log.i(TAG, "response.body() != null -> true");
-                    mNewsList = (ArrayList<Row>) response.body().getRows();
-                    Log.i(TAG, "Заголовой последней новости: " + response.body().getRows().get(0).getTitle());
-                } else {
-                    Log.i(TAG, "response.body() != null -> false");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RetrofitNewsModel> call, Throwable t) {
-                Log.i(TAG, "Произошла ошибка при загрузке.");
-            }
-        });
     }
 
     private void setToolBar() {
@@ -225,6 +203,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch ((int) drawerItem.getIdentifier()) {
                             case 1:
+                                updateItems();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 2:
@@ -251,11 +230,11 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                 .build();
     }
 
-    private synchronized void setupAdapter() {
+    private void setupAdapter() {
         if (isAdded()) {
             mAdapter = new NewsAdapter(NewsLab.getInstance().getItems());
             mNewsRecyclerView.setAdapter(mAdapter);
-//            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -268,10 +247,10 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
     private class NewsAdapter extends RecyclerView.Adapter<NewsHolder> {
         private static final String TAG = "NewsAdapter";
-        private ArrayList<Row> mNewsList = new ArrayList<>();
+        private ArrayList<RetrofitNewsItem> mNewsList = new ArrayList<>();
 
-        public NewsAdapter(ArrayList<Row> newsItems) {
-            mNewsList = newsItems;
+        public NewsAdapter(ArrayList<RetrofitNewsItem> retrofitNewsItems) {
+            mNewsList = retrofitNewsItems;
             Log.d(TAG, "mNewsList.size() = " + mNewsList.size());
         }
 
@@ -283,7 +262,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         @Override
         public void onBindViewHolder(NewsHolder holder, int position) {
-            final Row item = mNewsList.get(position);
+            final RetrofitNewsItem item = mNewsList.get(position);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -322,7 +301,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
 
         }
 
-        public void bindNewsItem(Row item) {
+        public void bindNewsItem(RetrofitNewsItem item) {
             mTitleTextView.setText(item.getTitle());
             mDateTextView.setText(item.getDate());
             mRubricTextView.setText(item.getRubric());

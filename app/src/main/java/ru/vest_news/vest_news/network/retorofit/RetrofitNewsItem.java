@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Row {
+public class RetrofitNewsItem {
     private static final String BASE_URI = "http://www.vest-news.ru/";
 
     @SerializedName("nid")
