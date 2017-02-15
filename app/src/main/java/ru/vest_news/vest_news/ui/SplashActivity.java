@@ -10,14 +10,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ru.vest_news.vest_news.R;
 import ru.vest_news.vest_news.network.NewsPreLoader;
-import ru.vest_news.vest_news.network.retorofit.RetrofitNewsFetcher;
+import ru.vest_news.vest_news.application.App;
 import ru.vest_news.vest_news.network.retorofit.RetrofitNewsModel;
 
 public class SplashActivity extends AppCompatActivity {
@@ -33,30 +31,28 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        //Тестовый код
-        runRetrofitApi();
-
         new NewsPreLoader().execute();
         new Loading().execute();
     }
 
-    private void runRetrofitApi() {
-        RetrofitNewsFetcher.getApi().getData(5).enqueue(new Callback<RetrofitNewsModel>() {
-            @Override
-            public void onResponse(Call<RetrofitNewsModel> call, Response<RetrofitNewsModel> response) {
-                Log.i(TAG, "Данные успешно получены.");
-                if (response.body() != null) {
-                    Log.i(TAG, "response.body() != null -> true");
-                } else {
-                    Log.i(TAG, "response.body() != null -> false");
-                }
-            }
-            @Override
-            public void onFailure(Call<RetrofitNewsModel> call, Throwable t) {
-                Log.i(TAG, "Произошла ошибка при загрузке.");
-            }
-        });
-    }
+//    private void runRetrofitApi() {
+//        App.getApi().getData(5).enqueue(new Callback<RetrofitNewsModel>() {
+//            @Override
+//            public void onResponse(Call<RetrofitNewsModel> call, Response<RetrofitNewsModel> response) {
+//                Log.i(TAG, "Данные успешно получены.");
+//                if (response.body() != null) {
+//                    Log.i(TAG, "response.body() != null -> true");
+//                    Log.i(TAG, "Заголовой последней новости: " + response.body().getRows().get(0).getTitle());
+//                } else {
+//                    Log.i(TAG, "response.body() != null -> false");
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<RetrofitNewsModel> call, Throwable t) {
+//                Log.i(TAG, "Произошла ошибка при загрузке.");
+//            }
+//        });
+//    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

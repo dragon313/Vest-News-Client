@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,11 +35,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ru.vest_news.vest_news.R;
+import ru.vest_news.vest_news.application.App;
 import ru.vest_news.vest_news.model.NewsItem;
-import ru.vest_news.vest_news.network.NewsFetcher;
 import ru.vest_news.vest_news.network.NewsPreLoader;
 import ru.vest_news.vest_news.network.NewsService;
+import ru.vest_news.vest_news.network.retorofit.RetrofitNewsModel;
+import ru.vest_news.vest_news.network.retorofit.Row;
 import ru.vest_news.vest_news.utils.NewsLab;
 
 public class NewsListFragment extends VisibleFragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -52,6 +56,8 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     private Toolbar mToolbar;
     private Drawer mDrawer;
     private NewsLab mNewsLab = NewsLab.getInstance();
+    private RetrofitNewsModel mNewsModel;
+    private List<Row> mNewsList;
     private boolean isFirstStart = true;
 
 
@@ -64,6 +70,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+        runVestNewsApi();
     }
 
     @Nullable
@@ -139,6 +146,28 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
         setupAdapter();
     }
 
+    private void runVestNewsApi() {
+        App.getApi().getData(5).enqueue(new Callback<RetrofitNewsModel>() {
+            @Override
+            public void onResponse(Call<RetrofitNewsModel> call, Response<RetrofitNewsModel> response) {
+                Log.i(TAG, "Данные успешно получены.");
+                if (response.body() != null) {
+                    Log.i(TAG, "response.body() != null -> true");
+                    mNewsModel = response.body();
+                    mNewsList = response.body().getRows();
+                    Log.i(TAG, "Заголовой последней новости: " + response.body().getRows().get(0).getTitle());
+                } else {
+                    Log.i(TAG, "response.body() != null -> false");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RetrofitNewsModel> call, Throwable t) {
+                Log.i(TAG, "Произошла ошибка при загрузке.");
+            }
+        });
+    }
+
     private void setToolBar() {
         NewsListActivity activity = (NewsListActivity) getActivity();
         activity.setSupportActionBar(mToolbar);
@@ -205,19 +234,19 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                                 mDrawer.closeDrawer();
                                 return true;
                             case 2:
-                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 3:
-                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 4:
-                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             case 5:
-                                Toast.makeText(getActivity(),  getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getString(R.string.development_in_progress), Toast.LENGTH_SHORT).show();
                                 mDrawer.closeDrawer();
                                 return true;
                             default:
