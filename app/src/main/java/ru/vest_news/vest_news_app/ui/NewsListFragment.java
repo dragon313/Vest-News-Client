@@ -167,7 +167,6 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
                 .withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withTranslucentStatusBar(true)
-                .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
                         news,
                         weather,

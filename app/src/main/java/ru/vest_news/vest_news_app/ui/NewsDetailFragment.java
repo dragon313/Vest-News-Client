@@ -192,7 +192,6 @@ public class NewsDetailFragment extends Fragment {
                 .withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withTranslucentStatusBar(true)
-                .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
                         news,
                         weather,
