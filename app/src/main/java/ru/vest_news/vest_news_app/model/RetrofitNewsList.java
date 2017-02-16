@@ -1,8 +1,10 @@
-package ru.vest_news.vest_news_app.network.retorofit;
+package ru.vest_news.vest_news_app.model;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import ru.vest_news.vest_news_app.model.RetrofitNewsItem;
 
 public class RetrofitNewsList {
 

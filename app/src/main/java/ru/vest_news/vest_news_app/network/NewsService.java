@@ -16,7 +16,8 @@ import android.util.Log;
 import java.util.List;
 
 import ru.vest_news.vest_news_app.R;
-import ru.vest_news.vest_news_app.model.NewsItem;
+import ru.vest_news.vest_news_app.model.NewsLab;
+import ru.vest_news.vest_news_app.model.RetrofitNewsItem;
 import ru.vest_news.vest_news_app.ui.NewsListActivity;
 import ru.vest_news.vest_news_app.utils.QueryPreferences;
 
@@ -47,8 +48,8 @@ public class NewsService extends IntentService {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         if (isOn) {
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
-//            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), CONNECTION_INTERVAL, pi);
+//            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), CONNECTION_INTERVAL, pi);
         } else {
             alarmManager.cancel(pi);
             pi.cancel();
@@ -69,14 +70,16 @@ public class NewsService extends IntentService {
         }
         String lastResultId = QueryPreferences.getPrefLastResultId(this);
         String resultId = new NewsFetcher().getLastNewsId();
-        if (resultId.length()==0) {
+        Log.i(TAG, "Номер последней новости из NewsService: " + resultId);
+        if (resultId.length() == 0) {
             return;
         }
         if (resultId.equals(lastResultId)) {
             Log.d(TAG, "Got an old result: " + resultId);
         } else {
-            Log.d(TAG, "Got a new result:" + resultId);
-            List<NewsItem> items = new NewsFetcher().fetchItems();
+            Log.d(TAG, "Got a new result: " + resultId);
+            NewsFetcher.updateNewsList(1);
+            RetrofitNewsItem item = NewsLab.getInstance().getItems().get(0);
             Resources resources = getResources();
             Intent i = NewsListActivity.newIntent(this);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -86,7 +89,7 @@ public class NewsService extends IntentService {
                     .setTicker(resources.getString(R.string.new_news_title))
                     .setSmallIcon(R.drawable.ic_news)
                     .setContentTitle(resources.getString(R.string.new_news_title))
-                    .setContentText(items.get(0).getTitle())
+                    .setContentText(item.getTitle())
                     .setContentIntent(pi)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)

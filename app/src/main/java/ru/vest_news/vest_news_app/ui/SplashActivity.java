@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        NewsFetcher.updateNewsList();
+        NewsFetcher.updateNewsList(50);
         new Loading().execute();
     }
 
