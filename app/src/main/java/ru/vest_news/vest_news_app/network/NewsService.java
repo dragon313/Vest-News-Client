@@ -13,8 +13,6 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import java.util.List;
-
 import ru.vest_news.vest_news_app.R;
 import ru.vest_news.vest_news_app.model.NewsLab;
 import ru.vest_news.vest_news_app.model.RetrofitNewsItem;
@@ -24,7 +22,7 @@ import ru.vest_news.vest_news_app.utils.QueryPreferences;
 public class NewsService extends IntentService {
     private static final String TAG = "NewsService";
 
-    private static final int CONNECTION_INTERVAL = 1000 * 60; //60 секунд
+    private static final int CONNECTION_INTERVAL = 1000 * 10; //60 секунд
 
     public static final String ACTION_SHOW_NOTIFICATION =
             "ru.vest_news.vest_news.SHOW_NOTIFICATION";
@@ -78,8 +76,8 @@ public class NewsService extends IntentService {
             Log.d(TAG, "Got an old result: " + resultId);
         } else {
             Log.d(TAG, "Got a new result: " + resultId);
-            NewsFetcher.updateNewsList(1);
-            RetrofitNewsItem item = NewsLab.getInstance().getItems().get(0);
+//            NewsFetcher.updateNewsList(1);
+//            RetrofitNewsItem item = NewsLab.getInstance().getItems().get(0);
             Resources resources = getResources();
             Intent i = NewsListActivity.newIntent(this);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -89,7 +87,7 @@ public class NewsService extends IntentService {
                     .setTicker(resources.getString(R.string.new_news_title))
                     .setSmallIcon(R.drawable.ic_news)
                     .setContentTitle(resources.getString(R.string.new_news_title))
-                    .setContentText(item.getTitle())
+//                    .setContentText(item.getTitle())
                     .setContentIntent(pi)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
@@ -110,8 +108,7 @@ public class NewsService extends IntentService {
     private boolean isNetworkAvailableAndConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         boolean isNetworkAvailable = cm.getActiveNetworkInfo() != null;
-        boolean isNetworkConnected = isNetworkAvailable && cm.getActiveNetworkInfo().isConnected();
-        return isNetworkConnected;
+        return isNetworkAvailable && cm.getActiveNetworkInfo().isConnected();
     }
 
 }
