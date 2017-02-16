@@ -12,7 +12,11 @@
     <string name="drawer_item_news">Новости</string>
     <string name="drawer_item_settings">Настройки</string>
     <string name="drawer_item_contacts">Контакты</string>
-    <string name="drawer_item_about">О приложении</string>
+    <string name="drawer_item_about">О редакции</string>
     <string name="drawer_item_weather">Погода</string>
     <string name="development_in_progress">Раздел в разработке</string>
+
+
+    <string name="title_activity_contact">Контакты</string>
+    <string name="title_activity_about">О редакции</string>
 </resources>
