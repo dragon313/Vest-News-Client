@@ -25,9 +25,9 @@ public class NewsService extends IntentService {
     private static final int CONNECTION_INTERVAL = 1000 * 10; //60 секунд
 
     public static final String ACTION_SHOW_NOTIFICATION =
-            "ru.vest_news.vest_news.SHOW_NOTIFICATION";
+            "ru.vest_news.vest_news_app.SHOW_NOTIFICATION";
     public static final String PERM_PRIVATE =
-            "ru.vest_news.vest_news.PRIVATE";
+            "ru.vest_news.vest_news_app.PRIVATE";
     public static final String REQUEST_CODE = "REQUEST_CODE";
     public static final String NOTIFICATION = "NOTIFICATION";
 
@@ -46,8 +46,8 @@ public class NewsService extends IntentService {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         if (isOn) {
-//            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), CONNECTION_INTERVAL, pi);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+//            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), CONNECTION_INTERVAL, pi);
         } else {
             alarmManager.cancel(pi);
             pi.cancel();
@@ -76,10 +76,14 @@ public class NewsService extends IntentService {
             Log.d(TAG, "Got an old result: " + resultId);
         } else {
             Log.d(TAG, "Got a new result: " + resultId);
-//            NewsFetcher.updateNewsList(1);
-//            RetrofitNewsItem item = NewsLab.getInstance().getItems().get(0);
+            synchronized (this) {
+                NewsFetcher.updateNewsList(50);
+            }
+            RetrofitNewsItem item = NewsLab.getInstance().getItems().get(0);
             Resources resources = getResources();
+            Log.d(TAG, "Resources = " + resources.toString());
             Intent i = NewsListActivity.newIntent(this);
+            Log.d(TAG, "Intent = " + i.toString());
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
@@ -87,11 +91,13 @@ public class NewsService extends IntentService {
                     .setTicker(resources.getString(R.string.new_news_title))
                     .setSmallIcon(R.drawable.ic_news)
                     .setContentTitle(resources.getString(R.string.new_news_title))
-//                    .setContentText(item.getTitle())
+                    .setContentText(item.getTitle())
                     .setContentIntent(pi)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
                     .build();
+
+            Log.d(TAG, "Notification = " + notification.toString());
 
             showBackgroundNotification(0, notification);
         }

@@ -10,14 +10,14 @@ public class RetrofitNewsList {
 
     @SerializedName("rows")
     @Expose
-    private List<RetrofitNewsItem> rows;
+    private List<RetrofitNewsItem> items;
 
-    public List<RetrofitNewsItem> getRows() {
-        return rows;
+    public List<RetrofitNewsItem> getItems() {
+        return items;
     }
 
-    public void setRows(List<RetrofitNewsItem> rows) {
-        this.rows = rows;
+    public void setItems(List<RetrofitNewsItem> rows) {
+        this.items = rows;
     }
 
 }

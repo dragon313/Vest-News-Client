@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="ru.vest_news.vest_news.PRIVATE"/>
+    <uses-permission android:name="ru.vest_news.vest_news_app.PRIVATE"/>
 
     <application
         android:name=".application.App"
@@ -38,7 +38,7 @@
             android:name=".network.NotificationReceiver"
             android:exported="false">
             <intent-filter android:priority="-999">
-                <action android:name="ru.vest_news.vest_news.SHOW_NOTIFICATION"/>
+                <action android:name="ru.vest_news.vest_news_app.SHOW_NOTIFICATION"/>
             </intent-filter>
         </receiver>
 

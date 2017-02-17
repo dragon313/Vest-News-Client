@@ -31,7 +31,7 @@ public class NewsFetcher {
                 public void onResponse(Call<RetrofitNewsList> call, Response<RetrofitNewsList> response) {
                     Log.i(TAG, "Данные успешно получены.");
                     if (response.body() != null) {
-                        NewsLab.getInstance().setItems(response.body().getRows());
+                        NewsLab.getInstance().setItems(response.body().getItems());
                     } else {
                         Log.i(TAG, "response.body() != null -> false");
                     }

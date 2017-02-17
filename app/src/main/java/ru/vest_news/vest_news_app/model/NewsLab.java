@@ -23,10 +23,6 @@ public class NewsLab {
         mItems = items;
     }
 
-    public RetrofitNewsItem getItem(int position) {
-        return mItems.get(position);
-    }
-
     public RetrofitNewsItem getItem(String nid) {
         for (RetrofitNewsItem item : mItems) {
             if (item.getNid().equalsIgnoreCase(nid)) {
