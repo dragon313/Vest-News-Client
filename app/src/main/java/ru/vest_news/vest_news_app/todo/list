@@ -15,3 +15,8 @@ http://www.vest-news.ru/api/news
 http://www.vest-news.ru/api/news?limit=3&offset=10
 http://www.vest-news.ru/api/news?limit=5
 http://www.vest-news.ru/api/news/91627
+
+Способ подгрузки новостей.
+В NewsLab добавить возможность расширения списка.
+В ресайклвью обработать конец прокрутки.
+В конце прокрутки догружать в NewsLab элементы
