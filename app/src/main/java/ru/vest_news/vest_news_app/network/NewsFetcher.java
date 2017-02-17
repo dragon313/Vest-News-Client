@@ -22,7 +22,7 @@ public class NewsFetcher {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result.replace('\"', ' ').trim();
+        return result;
     }
 
     public static void updateNewsList(int count) {
