@@ -1,4 +1,4 @@
-package ru.vest_news.vest_news_app.network.retorofit;
+package ru.vest_news.vest_news_app.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

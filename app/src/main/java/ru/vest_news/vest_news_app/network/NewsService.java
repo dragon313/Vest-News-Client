@@ -13,22 +13,21 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import java.util.List;
-
 import ru.vest_news.vest_news_app.R;
-import ru.vest_news.vest_news_app.model.NewsItem;
+import ru.vest_news.vest_news_app.model.NewsLab;
+import ru.vest_news.vest_news_app.model.RetrofitNewsItem;
 import ru.vest_news.vest_news_app.ui.NewsListActivity;
 import ru.vest_news.vest_news_app.utils.QueryPreferences;
 
 public class NewsService extends IntentService {
     private static final String TAG = "NewsService";
 
-    private static final int CONNECTION_INTERVAL = 1000 * 60; //60 секунд
+    private static final int CONNECTION_INTERVAL = 1000 * 10; //60 секунд
 
     public static final String ACTION_SHOW_NOTIFICATION =
-            "ru.vest_news.vest_news.SHOW_NOTIFICATION";
+            "ru.vest_news.vest_news_app.SHOW_NOTIFICATION";
     public static final String PERM_PRIVATE =
-            "ru.vest_news.vest_news.PRIVATE";
+            "ru.vest_news.vest_news_app.PRIVATE";
     public static final String REQUEST_CODE = "REQUEST_CODE";
     public static final String NOTIFICATION = "NOTIFICATION";
 
@@ -69,16 +68,22 @@ public class NewsService extends IntentService {
         }
         String lastResultId = QueryPreferences.getPrefLastResultId(this);
         String resultId = new NewsFetcher().getLastNewsId();
-        if (resultId.length()==0) {
+        Log.i(TAG, "Номер последней новости из NewsService: " + resultId);
+        if (resultId.length() == 0) {
             return;
         }
         if (resultId.equals(lastResultId)) {
             Log.d(TAG, "Got an old result: " + resultId);
         } else {
-            Log.d(TAG, "Got a new result:" + resultId);
-            List<NewsItem> items = new NewsFetcher().fetchItems();
+            Log.d(TAG, "Got a new result: " + resultId);
+            synchronized (this) {
+                NewsFetcher.updateNewsList(50);
+            }
+            RetrofitNewsItem item = NewsLab.getInstance().getItems().get(0);
             Resources resources = getResources();
+            Log.d(TAG, "Resources = " + resources.toString());
             Intent i = NewsListActivity.newIntent(this);
+            Log.d(TAG, "Intent = " + i.toString());
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
@@ -86,11 +91,13 @@ public class NewsService extends IntentService {
                     .setTicker(resources.getString(R.string.new_news_title))
                     .setSmallIcon(R.drawable.ic_news)
                     .setContentTitle(resources.getString(R.string.new_news_title))
-                    .setContentText(items.get(0).getTitle())
+                    .setContentText(item.getTitle())
                     .setContentIntent(pi)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
                     .build();
+
+            Log.d(TAG, "Notification = " + notification.toString());
 
             showBackgroundNotification(0, notification);
         }
@@ -107,8 +114,7 @@ public class NewsService extends IntentService {
     private boolean isNetworkAvailableAndConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         boolean isNetworkAvailable = cm.getActiveNetworkInfo() != null;
-        boolean isNetworkConnected = isNetworkAvailable && cm.getActiveNetworkInfo().isConnected();
-        return isNetworkConnected;
+        return isNetworkAvailable && cm.getActiveNetworkInfo().isConnected();
     }
 
 }

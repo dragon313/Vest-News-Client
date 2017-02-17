@@ -34,11 +34,12 @@ import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
 
 import ru.vest_news.vest_news_app.R;
 import ru.vest_news.vest_news_app.network.NewsFetcher;
-import ru.vest_news.vest_news_app.network.retorofit.RetrofitNewsItem;
-import ru.vest_news.vest_news_app.utils.NewsLab;
+import ru.vest_news.vest_news_app.model.RetrofitNewsItem;
+import ru.vest_news.vest_news_app.model.NewsLab;
 
 public class NewsDetailFragment extends Fragment {
     private static final String TAG = "NewsDetailFragment";
+    private static final String BASE_URI = "http://www.vest-news.ru/";
 
     public static final String EXTRA_ID = "EXTRA_ID";
 
@@ -145,7 +146,7 @@ public class NewsDetailFragment extends Fragment {
                 startActivity(chooser);
                 return true;
             case R.id.menu_detail_show_in_browser:
-                Intent showInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(NewsFetcher.BASE_URI + "news/" + mItem.getNid()));
+                Intent showInBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(BASE_URI + "news/" + mItem.getNid()));
                 startActivity(showInBrowser);
             default:
                 return super.onOptionsItemSelected(item);
@@ -155,7 +156,7 @@ public class NewsDetailFragment extends Fragment {
     private String createShareText() {
         StringBuilder newsText = new StringBuilder();
         newsText.append(mItem.getTitle()).append("\n");
-        newsText.append(NewsFetcher.BASE_URI + "news/").append(mItem.getNid());
+        newsText.append(BASE_URI + "news/").append(mItem.getNid());
         return newsText.toString();
     }
 

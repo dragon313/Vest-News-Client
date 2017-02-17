@@ -1,7 +1,7 @@
 СРОЧНО
 Реализовать вкладку Контакты
 1. Переписать метод проверки наличия новых новостей используя запрос последней
-новости http://www.vest-news.ru/api/last-news-item-id
+новости
 2. Реализовать подгрузку новостей при прокрутке списка до конца.
 
 
@@ -10,6 +10,7 @@
 <div>Icons made by <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver">Madebyoliver</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
 API
+http://www.vest-news.ru/api/last-news-item-id
 http://www.vest-news.ru/api/news
 http://www.vest-news.ru/api/news?limit=3&offset=10
 http://www.vest-news.ru/api/news?limit=5

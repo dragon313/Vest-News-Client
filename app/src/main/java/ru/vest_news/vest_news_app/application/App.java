@@ -8,7 +8,7 @@ import ru.vest_news.vest_news_app.network.retorofit.VestNewsApi;
 
 public class App extends Application {
     private static final String BASE_URI = "http://www.vest-news.ru";
-    private static VestNewsApi sVestNewsApi;
+    private static VestNewsApi sVestNewsList;
     private Retrofit mRetrofit;
 
     @Override
@@ -19,10 +19,10 @@ public class App extends Application {
                 .baseUrl(BASE_URI)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        sVestNewsApi = mRetrofit.create(VestNewsApi.class);
+        sVestNewsList = mRetrofit.create(VestNewsApi.class);
     }
 
-    public static VestNewsApi getNewsListApi() {
-        return sVestNewsApi;
+    public static VestNewsApi getVestNewsApi() {
+        return sVestNewsList;
     }
 }

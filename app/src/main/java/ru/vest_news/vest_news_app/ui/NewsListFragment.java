@@ -37,8 +37,8 @@ import java.util.ArrayList;
 import ru.vest_news.vest_news_app.R;
 import ru.vest_news.vest_news_app.network.NewsFetcher;
 import ru.vest_news.vest_news_app.network.NewsService;
-import ru.vest_news.vest_news_app.network.retorofit.RetrofitNewsItem;
-import ru.vest_news.vest_news_app.utils.NewsLab;
+import ru.vest_news.vest_news_app.model.RetrofitNewsItem;
+import ru.vest_news.vest_news_app.model.NewsLab;
 
 public class NewsListFragment extends VisibleFragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NewsListFragment";
@@ -130,7 +130,7 @@ public class NewsListFragment extends VisibleFragment implements SwipeRefreshLay
     }
 
     private void updateItems() {
-        NewsFetcher.updateNewsList();
+        NewsFetcher.updateNewsList(50);
         setupAdapter();
     }
 
